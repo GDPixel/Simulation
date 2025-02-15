@@ -40,5 +40,9 @@ public class WorldMap {
         }
         entities.put(coordinate, entity);
     }
+
+    public boolean isCellFree(Coordinate coordinate) {
+        return !entities.containsKey(coordinate);
+    }
 }
 
