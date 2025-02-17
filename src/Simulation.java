@@ -1,11 +1,9 @@
 import action.Action;
-import action.PopulateWorld;
+import action.CustomPopulateWorld;
+import action.PopulateWorldAction;
 import entity.Grass;
-import entity.Rock;
-import entity.Tree;
-import entity.creature.Herbivore;
-import entity.creature.Predator;
-import worldmap.Coordinate;
+
+import worldmap.Coordinates;
 import worldmap.WorldMap;
 
 import java.util.ArrayList;
@@ -16,17 +14,18 @@ public class Simulation {
     //  add MapRenderer
     //  add action.Action spawn Entities
     //
-    private static final int MAX_TURN = 3;
+    private static final int MAX_TURN = 2;
     private final WorldMap worldMap;
     private final Renderer worldMapRenderer;
     private final List<action.Action> initActions;
     private final List<action.Action> turnActions;
 
     public Simulation() {
-        worldMap = new WorldMap(30, 30);
+        worldMap = new WorldMap(10, 15);
         worldMapRenderer = new Renderer(worldMap);
         initActions = new ArrayList<>();
-        initActions.add(new PopulateWorld(worldMap));
+        initActions.add(new PopulateWorldAction(worldMap));
+        //initActions.add(new CustomPopulateWorld(worldMap));
         turnActions = new ArrayList<>();
     }
 
@@ -41,20 +40,15 @@ public class Simulation {
             action.execute();
         }
 
-//        //fill world for test render
-//        worldMap.addEntity(new Coordinate(0,0), new Grass());
-//        worldMap.addEntity(new Coordinate(2,1), new Rock());
-//        worldMap.addEntity(new Coordinate(6,6), new Predator());
-//        worldMap.addEntity(new Coordinate(3,4), new Predator());
-//        worldMap.addEntity(new Coordinate(2,7), new Herbivore());
-//        worldMap.addEntity(new Coordinate(3,7), new Herbivore());
-//        worldMap.addEntity(new Coordinate(7,7), new Tree());
-//        worldMap.addEntity(new Coordinate(8,1), new Tree());
-//        worldMap.addEntity(new Coordinate(9,9), new Tree());
-
         for (int turn = 0; turn < MAX_TURN; turn++) {
             System.out.println("Turn: " + turn);
             worldMapRenderer.render();
+            BFS bfs = new BFS(worldMap, new Coordinates(0,0), new Grass());
+            List<Coordinates> path = bfs.findPath();
+            System.out.println("Grass is found: " + path);
+            for (Coordinates coords : path) {
+                System.out.printf("(%d %d) is free:%b%n",coords.getRow(),coords.getCol(), worldMap.isCellFree(coords));
+            }
             nextTurn();
         }
 
@@ -64,5 +58,4 @@ public class Simulation {
 
     }
 }
-
 

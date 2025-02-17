@@ -2,11 +2,17 @@ package worldmap;
 
 import java.util.Objects;
 
-public class Coordinate {
+public class Coordinates {
     private final int row;
     private final int col;
 
-    public Coordinate(int row, int col) {
+    //TODO: delete later?
+    @Override
+    public String toString() {
+        return "(" + row + ", " + col + ')';
+    }
+
+    public Coordinates(int row, int col) {
         this.row = row;
         this.col = col;
     }
@@ -14,6 +20,7 @@ public class Coordinate {
     public int getRow() {
         return row;
     }
+
     public int getCol() {
         return col;
     }
@@ -21,7 +28,7 @@ public class Coordinate {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        Coordinate that = (Coordinate) o;
+        Coordinates that = (Coordinates) o;
         return row == that.row && col == that.col;
     }
 

@@ -4,14 +4,16 @@ import entity.Rock;
 import entity.Tree;
 import entity.creature.Herbivore;
 import entity.creature.Predator;
-import worldmap.Coordinate;
+import worldmap.Coordinates;
 import worldmap.WorldMap;
 
 import java.util.Map;
 
 public class Renderer {
+    public static final String ANSI_BLACK_SQUARE_BACKGROUND = "\u001B[0;103m";
+    public static final String ANSI_RESET = "\u001B[0m";
     private static final String FREE_CELL = "⬛";
-    private static final String ROCK = "\uD83D\uDDFB" ;
+    private static final String ROCK = "\uD83D\uDDFB";
     private static final String TREE = "\uD83C\uDF33";
     private static final String GRASS = "\uD83C\uDF40";
     private static final String HERBIVORE = "\uD83D\uDC04";
@@ -27,19 +29,19 @@ public class Renderer {
     }
 
     public void render() {
-        Map<Coordinate, Entity> entities = worldMap.getEntities();
+        Map<Coordinates, Entity> entities = worldMap.getEntities();
         for (int row = 0; row < maxRow; row++) {
+            System.out.print(ANSI_BLACK_SQUARE_BACKGROUND);
             for (int col = 0; col < maxCol; col++) {
-                // TODO: add equal hashcode to Coordinate
-                Coordinate coordinate = new Coordinate(row, col);
-                if (entities.containsKey(coordinate)) {
-                    String sprite = toSprite(entities.get(coordinate));
-                    System.out.printf("%s", sprite);
+                Coordinates coordinates = new Coordinates(row, col);
+                if (entities.containsKey(coordinates)) {
+                    String sprite = toSprite(entities.get(coordinates));
+                    System.out.print(sprite);
                 } else {
-                    System.out.printf("%s", FREE_CELL);
+                    System.out.print(FREE_CELL);
                 }
             }
-            System.out.println();
+            System.out.println(ANSI_RESET);
         }
     }
 

@@ -8,12 +8,12 @@ import java.util.Map;
 public class WorldMap {
     private final int maxRow;
     private final int maxCol;
-    private final Map<Coordinate, Entity> entities;
+    private final Map<Coordinates, Entity> entities;
 
     public WorldMap(int maxRow, int maxCol) {
         this.maxRow = maxRow;
         this.maxCol = maxCol;
-        entities = new HashMap<Coordinate, Entity>();
+        entities = new HashMap<Coordinates, Entity>();
     }
 
     public int getMaxRow() {
@@ -24,25 +24,26 @@ public class WorldMap {
         return maxCol;
     }
 
-    public Map<Coordinate, Entity> getEntities() {
+    // TODO: dont forget u violate encapsulation
+    public Map<Coordinates, Entity> getEntities() {
         return entities;
     }
 
-    public void addEntity(Coordinate coordinate, Entity entity) {
-        if (coordinate.getRow() >= maxRow || coordinate.getCol() >= maxCol) {
+    public void addEntity(Coordinates coordinates, Entity entity) {
+        if (coordinates.getRow() >= maxRow || coordinates.getCol() >= maxCol) {
             throw new IllegalArgumentException("Coordinates (%d, %d) in WorldMap out of bounds"
-                    .formatted(coordinate.getRow(), coordinate.getCol()));
+                    .formatted(coordinates.getRow(), coordinates.getCol()));
         }
 
-        if (coordinate.getRow() < 0 || coordinate.getCol() < 0) {
+        if (coordinates.getRow() < 0 || coordinates.getCol() < 0) {
             throw new IllegalArgumentException("Coordinates (%d, %d) in WorldMap can't be negative"
-                    .formatted(coordinate.getRow(), coordinate.getCol()));
+                    .formatted(coordinates.getRow(), coordinates.getCol()));
         }
-        entities.put(coordinate, entity);
+        entities.put(coordinates, entity);
     }
 
-    public boolean isCellFree(Coordinate coordinate) {
-        return !entities.containsKey(coordinate);
+    public boolean isCellFree(Coordinates coordinates) {
+        return !entities.containsKey(coordinates);
     }
 }
 

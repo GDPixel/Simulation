@@ -3,23 +3,23 @@ package action;
 import entity.*;
 import entity.creature.Herbivore;
 import entity.creature.Predator;
-import worldmap.Coordinate;
+import worldmap.Coordinates;
 import worldmap.WorldMap;
 
 import java.util.Random;
 
-public class PopulateWorld extends Action {
-    private WorldMap worldMap;
+public class PopulateWorldAction extends Action {
+    protected WorldMap worldMap;
     private int totalEntityTypes;
 
-    public PopulateWorld(WorldMap worldMap) {
+    public PopulateWorldAction(WorldMap worldMap) {
         this.worldMap = worldMap;
         this.totalEntityTypes = EntityType.values().length;
     }
 
     @Override
     public void execute() {
-        populate(80);
+        populate(50);
     }
 
     private void populate(int fillPercent) {
@@ -28,10 +28,10 @@ public class PopulateWorld extends Action {
         int eachEntityToAdd = (maxCoordinates * fillPercent / 100) / totalEntityTypes;
         System.out.println("How many of each entity to add: " + eachEntityToAdd);
         int totalEntitiesToAdd = eachEntityToAdd * totalEntityTypes;
-        System.out.println("Total entites to add: " + totalEntitiesToAdd);
+        System.out.println("Total entities to add: " + totalEntitiesToAdd);
         for (EntityType type : EntityType.values()) {
             for (int i = 0; i < eachEntityToAdd; i++) {
-                Coordinate freeCell = getRandomFreeCell();
+                Coordinates freeCell = getRandomFreeCell();
                 worldMap.addEntity(freeCell, createEntity(type));
             }
         }
@@ -50,20 +50,21 @@ public class PopulateWorld extends Action {
             case PREDATOR:
                 return new Predator();
             default:
+                //TODO: add exception
                 return null; // Handle unknown types gracefully
         }
     }
 
-    private Coordinate getRandomFreeCell() {
+    private Coordinates getRandomFreeCell() {
         Random rand = new Random();
         while (true) {
             int row = rand.nextInt(worldMap.getMaxRow());
             int col = rand.nextInt(worldMap.getMaxCol());
             // TODO: don't like it every time create new Coordinate
             // think what to do
-            Coordinate coordinate = new Coordinate(row, col);
-            if (worldMap.isCellFree(coordinate)) {
-                return coordinate;
+            Coordinates coordinates = new Coordinates(row, col);
+            if (worldMap.isCellFree(coordinates)) {
+                return coordinates;
             }
         }
     }
@@ -72,7 +73,8 @@ public class PopulateWorld extends Action {
 
 class TestPopulateWorld {
     public static void main(String[] args) {
-        PopulateWorld world = new PopulateWorld(new WorldMap(10, 10));
+        PopulateWorldAction world = new PopulateWorldAction(new WorldMap(10, 10));
         world.execute();
     }
 }
+
