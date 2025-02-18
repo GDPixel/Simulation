@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class PopulateWorldAction extends Action {
     protected WorldMap worldMap;
-    private int totalEntityTypes;
+    private final int totalEntityTypes;
 
     public PopulateWorldAction(WorldMap worldMap) {
         this.worldMap = worldMap;
@@ -19,10 +19,13 @@ public class PopulateWorldAction extends Action {
 
     @Override
     public void execute() {
-        populate(50);
+        populate(20 );
     }
 
     private void populate(int fillPercent) {
+        if (fillPercent < 0 || fillPercent > 100 ) {
+            throw new IllegalArgumentException("fillPercent must be between 0 and 100");
+        }
         int maxCoordinates = worldMap.getMaxRow() * worldMap.getMaxCol();
         System.out.println("max free cells: " + maxCoordinates);
         int eachEntityToAdd = (maxCoordinates * fillPercent / 100) / totalEntityTypes;
@@ -38,21 +41,16 @@ public class PopulateWorldAction extends Action {
     }
 
     private Entity createEntity(EntityType type) {
-        switch (type) {
-            case GRASS:
-                return new Grass();
-            case ROCK:
-                return new Rock();
-            case TREE:
-                return new Tree();
-            case HERBIVORE:
-                return new Herbivore();
-            case PREDATOR:
-                return new Predator();
-            default:
+        return switch (type) {
+            case GRASS -> new Grass();
+            case ROCK -> new Rock();
+            case TREE -> new Tree();
+            case HERBIVORE -> new Herbivore();
+            case PREDATOR -> new Predator();
+            default ->
                 //TODO: add exception
-                return null; // Handle unknown types gracefully
-        }
+                    null; // Handle unknown types gracefully
+        };
     }
 
     private Coordinates getRandomFreeCell() {

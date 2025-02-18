@@ -1,5 +1,6 @@
+package BFS;
+
 import entity.Entity;
-import entity.Grass;
 import worldmap.Coordinates;
 import worldmap.WorldMap;
 
@@ -11,26 +12,21 @@ public class BFS {
     private final Entity target;
 
 
-    public BFS(WorldMap worldMap, Coordinates start, Grass target) {
+    public BFS(WorldMap worldMap, Coordinates start, Entity target) {
         this.worldMap = worldMap;
         this.start = start;
         this.target = target;
     }
 
     public List<Coordinates> findPath() {
-        // TODO: bug move through occupied cell
-        Set<Coordinates> visited = new HashSet<Coordinates>();
-        Queue<Coordinates> queue = new LinkedList<Coordinates>();
+        Set<Coordinates> visited = new HashSet<>();
+        Queue<Coordinates> queue = new LinkedList<>();
         queue.add(start);
-        //TODO: violate encapsulation
-        Map<Coordinates, Entity> entities = worldMap.getEntities();
         Map<Coordinates, Coordinates> backTrace = new HashMap<>();
         while (!queue.isEmpty()) {
             Coordinates currentCoordinates = queue.remove();
             visited.add(currentCoordinates);
-            if (entities.containsKey(currentCoordinates) && entities.get(currentCoordinates).getClass() == target.getClass()) {
-                System.out.println("Found it");
-                System.out.println(currentCoordinates.getRow() + " " + currentCoordinates.getCol());
+            if (!worldMap.isCellFree(currentCoordinates) && worldMap.getEntity(currentCoordinates).getClass() == target.getClass()) {
                 return reconstructPath(backTrace, currentCoordinates, start);
             }
 
@@ -38,7 +34,7 @@ public class BFS {
             for (Coordinates adjacentCell : adjacentCells) {
                 if ((!visited.contains(adjacentCell))
                         && (worldMap.isCellFree(adjacentCell)
-                        || (entities.get(adjacentCell).getClass() == target.getClass()))) {
+                        || (worldMap.getEntity(adjacentCell).getClass() == target.getClass()))) {
                     queue.add(adjacentCell);
                     backTrace.put(adjacentCell, currentCoordinates);
                 }
@@ -62,7 +58,7 @@ public class BFS {
 
 
         List<Coordinates> result = new ArrayList<>();
-        for (var coordinates : List.of(leftUp, up, rightUp, left,right, rightDown, down, rightDown)) {
+        for (var coordinates : List.of(leftUp, up, rightUp, left, right, rightDown, leftDown, down, rightDown)) {
             if (isCellOnMap(coordinates)) {
                 result.add(coordinates);
             }
@@ -83,6 +79,8 @@ public class BFS {
             path.add(current);
             current = backTrace.get(current);
         }
+
+        path.add(end);
 
         Collections.reverse(path);
         return path;

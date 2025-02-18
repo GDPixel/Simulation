@@ -8,20 +8,34 @@ import entity.creature.Predator;
 import worldmap.Coordinates;
 import worldmap.WorldMap;
 
-public class CustomPopulateWorld extends PopulateWorldAction {
-    public CustomPopulateWorld(WorldMap worldMap) {
+public class CustomPopulateWorldAction extends PopulateWorldAction {
+    public CustomPopulateWorldAction(WorldMap worldMap) {
         super(worldMap);
     }
 
     @Override
     public void execute() {
-        custom7x7();
+        custom10x15();
+    }
+
+    private void custom10x15() {
+        worldMap.addEntity(new Coordinates(1,4), new Tree());
+        //worldMap.addEntity(new Coordinates(1,6), new Grass());
+        worldMap.addEntity(new Coordinates(2,1), new Rock());
+        worldMap.addEntity(new Coordinates(2,4), new Herbivore());
+        worldMap.addEntity(new Coordinates(3,7), new Grass());
+        worldMap.addEntity(new Coordinates(3,6), new Tree());
+        worldMap.addEntity(new Coordinates(5,8), new Predator());
+        worldMap.addEntity(new Coordinates(6,2), new Grass());
+        worldMap.addEntity(new Coordinates(7,5), new Herbivore());
+        worldMap.addEntity(new Coordinates(7,10), new Tree());
+        worldMap.addEntity(new Coordinates(9,14), new Predator());
     }
 
     private void custom7x7() {
         worldMap.addEntity(new Coordinates(3,0), new Grass());
         worldMap.addEntity(new Coordinates(1,6), new Grass());
-        //worldMap.addEntity(new Coordinates(6,2), new Grass());
+        worldMap.addEntity(new Coordinates(6,2), new Grass());
         worldMap.addEntity(new Coordinates(2,1), new Rock());
         worldMap.addEntity(new Coordinates(6,6), new Predator());
         worldMap.addEntity(new Coordinates(3,4), new Predator());

@@ -1,20 +1,13 @@
 import action.Action;
-import action.CustomPopulateWorld;
-import action.PopulateWorldAction;
-import entity.Grass;
-
-import worldmap.Coordinates;
+import action.CustomPopulateWorldAction;
+import action.MoveAllCreaturesAction;
 import worldmap.WorldMap;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Simulation {
-    // TODO: add action.Action
-    //  add MapRenderer
-    //  add action.Action spawn Entities
-    //
-    private static final int MAX_TURN = 2;
+    private static final int MAX_TURN = 25;
     private final WorldMap worldMap;
     private final Renderer worldMapRenderer;
     private final List<action.Action> initActions;
@@ -24,9 +17,10 @@ public class Simulation {
         worldMap = new WorldMap(10, 15);
         worldMapRenderer = new Renderer(worldMap);
         initActions = new ArrayList<>();
-        initActions.add(new PopulateWorldAction(worldMap));
-        //initActions.add(new CustomPopulateWorld(worldMap));
+        //initActions.add(new PopulateWorldAction(worldMap));
+        initActions.add(new CustomPopulateWorldAction(worldMap));
         turnActions = new ArrayList<>();
+        turnActions.add(new MoveAllCreaturesAction(worldMap));
     }
 
     public void nextTurn() {
@@ -43,12 +37,6 @@ public class Simulation {
         for (int turn = 0; turn < MAX_TURN; turn++) {
             System.out.println("Turn: " + turn);
             worldMapRenderer.render();
-            BFS bfs = new BFS(worldMap, new Coordinates(0,0), new Grass());
-            List<Coordinates> path = bfs.findPath();
-            System.out.println("Grass is found: " + path);
-            for (Coordinates coords : path) {
-                System.out.printf("(%d %d) is free:%b%n",coords.getRow(),coords.getCol(), worldMap.isCellFree(coords));
-            }
             nextTurn();
         }
 

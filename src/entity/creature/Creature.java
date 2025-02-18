@@ -1,11 +1,20 @@
 package entity.creature;
 
 import entity.Entity;
+import worldmap.Coordinates;
+import worldmap.WorldMap;
+
+import java.util.List;
 
 public abstract class Creature extends Entity {
-    private int speed;
+    protected int speed;
     private int hp;
 
-    public abstract void makeMove();
+    public Creature(int speed, int hp) {
+        this.speed = speed;
+        this.hp = hp;
+    }
+
+    public abstract void makeMove(List<Coordinates> steps, WorldMap worldMap);
 }
 

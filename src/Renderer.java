@@ -7,8 +7,6 @@ import entity.creature.Predator;
 import worldmap.Coordinates;
 import worldmap.WorldMap;
 
-import java.util.Map;
-
 public class Renderer {
     public static final String ANSI_BLACK_SQUARE_BACKGROUND = "\u001B[0;103m";
     public static final String ANSI_RESET = "\u001B[0m";
@@ -19,8 +17,8 @@ public class Renderer {
     private static final String HERBIVORE = "\uD83D\uDC04";
     private static final String PREDATOR = "\uD83D\uDC05";
     private final WorldMap worldMap;
-    private int maxCol;
-    private int maxRow;
+    private final int maxCol;
+    private final int maxRow;
 
     Renderer(WorldMap worldMap) {
         this.worldMap = worldMap;
@@ -29,21 +27,23 @@ public class Renderer {
     }
 
     public void render() {
-        Map<Coordinates, Entity> entities = worldMap.getEntities();
+        //Map<Coordinates, Entity> entities = worldMap.getEntities();
         for (int row = 0; row < maxRow; row++) {
             System.out.print(ANSI_BLACK_SQUARE_BACKGROUND);
             for (int col = 0; col < maxCol; col++) {
                 Coordinates coordinates = new Coordinates(row, col);
-                if (entities.containsKey(coordinates)) {
-                    String sprite = toSprite(entities.get(coordinates));
-                    System.out.print(sprite);
-                } else {
+                if (worldMap.isCellFree(coordinates)) {
                     System.out.print(FREE_CELL);
+                } else {
+                    Entity entity = worldMap.getEntity(coordinates);
+                    String sprite = toSprite(entity);
+                    System.out.print(sprite);
                 }
             }
             System.out.println(ANSI_RESET);
         }
     }
+
 
     private String toSprite(Entity entity) {
         String result = "";
@@ -61,5 +61,4 @@ public class Renderer {
 
         return result;
     }
-
 }

@@ -24,12 +24,23 @@ public class WorldMap {
         return maxCol;
     }
 
-    // TODO: dont forget u violate encapsulation
-    public Map<Coordinates, Entity> getEntities() {
-        return entities;
+    public Entity getEntity(Coordinates coordinates) {
+        // TODO: DRY
+        if (coordinates.getRow() >= maxRow || coordinates.getCol() >= maxCol) {
+            throw new IllegalArgumentException("Coordinates (%d, %d) in WorldMap out of bounds"
+                    .formatted(coordinates.getRow(), coordinates.getCol()));
+        }
+
+        if (coordinates.getRow() < 0 || coordinates.getCol() < 0) {
+            throw new IllegalArgumentException("Coordinates (%d, %d) in WorldMap can't be negative"
+                    .formatted(coordinates.getRow(), coordinates.getCol()));
+        }
+
+        return entities.get(coordinates);
     }
 
     public void addEntity(Coordinates coordinates, Entity entity) {
+        // TODO: DRY
         if (coordinates.getRow() >= maxRow || coordinates.getCol() >= maxCol) {
             throw new IllegalArgumentException("Coordinates (%d, %d) in WorldMap out of bounds"
                     .formatted(coordinates.getRow(), coordinates.getCol()));
@@ -44,6 +55,21 @@ public class WorldMap {
 
     public boolean isCellFree(Coordinates coordinates) {
         return !entities.containsKey(coordinates);
+    }
+
+    public void removeEntity(Coordinates coordinates) {
+        // TODO: DRY
+        if (coordinates.getRow() >= maxRow || coordinates.getCol() >= maxCol) {
+            throw new IllegalArgumentException("Coordinates (%d, %d) in WorldMap out of bounds"
+                    .formatted(coordinates.getRow(), coordinates.getCol()));
+        }
+
+        if (coordinates.getRow() < 0 || coordinates.getCol() < 0) {
+            throw new IllegalArgumentException("Coordinates (%d, %d) in WorldMap can't be negative"
+                    .formatted(coordinates.getRow(), coordinates.getCol()));
+        }
+
+        entities.remove(coordinates);
     }
 }
 
