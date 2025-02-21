@@ -17,13 +17,23 @@ public class Predator extends Creature {
         this.attackPower = attackPower;
     }
 
+    @Override
     public void makeMove(List<Coordinates> steps, WorldMap worldMap) {
-        System.out.println("Predator is moving toward: " + steps.getLast());
-        // TODO:DRY
-        int possibleSteps = Math.min(speed, steps.size() - 1);
-        worldMap.addEntity(steps.get(possibleSteps - 1), this);
-        worldMap.removeEntity(steps.getFirst());
-        // TODO: possible bug remove creature if it cant move
+        // TODO: DRY and possible null
+        if(isFoodNearBy(steps.getFirst())) {
+            eat();
+        } else {
+            super.makeMove(steps, worldMap);
+            System.out.println("Predator is moving toward: " + steps.getLast());
+            // TODO: possible bug remove creature if it cant move
+        }
+    }
 
+    private boolean isFoodNearBy(Coordinates coordinates) {
+        return false;
+    }
+
+    private void eat() {
+        System.out.println("eating");
     }
 }

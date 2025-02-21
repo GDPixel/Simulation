@@ -20,9 +20,9 @@ public class CustomPopulateWorldAction extends PopulateWorldAction {
 
     private void custom10x15() {
         worldMap.addEntity(new Coordinates(1,4), new Tree());
-        //worldMap.addEntity(new Coordinates(1,6), new Grass());
+        worldMap.addEntity(new Coordinates(1,6), new Grass());
         worldMap.addEntity(new Coordinates(2,1), new Rock());
-        worldMap.addEntity(new Coordinates(2,4), new Herbivore());
+        worldMap.addEntity(new Coordinates(2,5), new Herbivore());
         worldMap.addEntity(new Coordinates(3,7), new Grass());
         worldMap.addEntity(new Coordinates(3,6), new Tree());
         worldMap.addEntity(new Coordinates(5,8), new Predator());

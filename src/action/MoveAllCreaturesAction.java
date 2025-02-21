@@ -16,6 +16,7 @@ import java.util.Set;
 public class MoveAllCreaturesAction extends Action {
     private final WorldMap worldMap;
 
+    // TODO: may inject moving algorithm BFS or A*
     public MoveAllCreaturesAction(WorldMap worldMap) {
         this.worldMap = worldMap;
     }
@@ -36,9 +37,10 @@ public class MoveAllCreaturesAction extends Action {
             // TODO: check NULLpointer
             List<Coordinates> path = bfs.findPath();
             // there's some cells between start and target
-            if (path.size() > 2) {
-                creature.makeMove(path, worldMap);
-            }
+            creature.makeMove(path, worldMap);
+//            if (path.size() > 2) {
+//                creature.makeMove(path, worldMap);
+//            }
         }
     }
 

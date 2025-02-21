@@ -3,6 +3,7 @@ package BFS;
 import entity.Entity;
 import worldmap.Coordinates;
 import worldmap.WorldMap;
+import worldmap.WorldMapUtil;
 
 import java.util.*;
 
@@ -30,7 +31,7 @@ public class BFS {
                 return reconstructPath(backTrace, currentCoordinates, start);
             }
 
-            List<Coordinates> adjacentCells = getAdjacentCells(currentCoordinates);
+            List<Coordinates> adjacentCells = WorldMapUtil.getCellsAroundTarget(currentCoordinates, worldMap);
             for (Coordinates adjacentCell : adjacentCells) {
                 if ((!visited.contains(adjacentCell))
                         && (worldMap.isCellFree(adjacentCell)
@@ -42,34 +43,6 @@ public class BFS {
         }
 
         return Collections.emptyList();
-    }
-
-    private List<Coordinates> getAdjacentCells(Coordinates currentCell) {
-        Coordinates leftUp = new Coordinates(currentCell.getRow() - 1, currentCell.getCol() - 1);
-        Coordinates up = new Coordinates(currentCell.getRow() - 1, currentCell.getCol());
-        Coordinates rightUp = new Coordinates(currentCell.getRow() - 1, currentCell.getCol() + 1);
-
-        Coordinates left = new Coordinates(currentCell.getRow(), currentCell.getCol() - 1);
-        Coordinates right = new Coordinates(currentCell.getRow(), currentCell.getCol() + 1);
-
-        Coordinates leftDown = new Coordinates(currentCell.getRow() + 1, currentCell.getCol() - 1);
-        Coordinates down = new Coordinates(currentCell.getRow() + 1, currentCell.getCol());
-        Coordinates rightDown = new Coordinates(currentCell.getRow() + 1, currentCell.getCol() + 1);
-
-
-        List<Coordinates> result = new ArrayList<>();
-        for (var coordinates : List.of(leftUp, up, rightUp, left, right, rightDown, leftDown, down, rightDown)) {
-            if (isCellOnMap(coordinates)) {
-                result.add(coordinates);
-            }
-        }
-
-        return result;
-    }
-
-    private boolean isCellOnMap(Coordinates coordinates) {
-        return coordinates.getRow() >= 0 && coordinates.getRow() < worldMap.getMaxRow()
-                && coordinates.getCol() >= 0 && coordinates.getCol() < worldMap.getMaxCol();
     }
 
     private List<Coordinates> reconstructPath(Map<Coordinates, Coordinates> backTrace, Coordinates start, Coordinates end) {

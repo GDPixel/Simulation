@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Simulation {
-    private static final int MAX_TURN = 25;
+    private static final int MAX_TURN = 100;
     private final WorldMap worldMap;
     private final Renderer worldMapRenderer;
     private final List<action.Action> initActions;
