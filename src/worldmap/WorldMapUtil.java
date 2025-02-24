@@ -32,6 +32,6 @@ public class WorldMapUtil {
 
     private static boolean isCellOnMap(Coordinates coordinates, WorldMap worldMap) {
         return coordinates.getRow() >= 0 && coordinates.getRow() < worldMap.getMaxRow()
-                && coordinates.getCol() >= 0 && coordinates.getCol() < worldMap.getMaxCol();
+                && coordinates.getCol() >= 0 && coordinates.getCol() < worldMap.getMaxColumn();
     }
 }

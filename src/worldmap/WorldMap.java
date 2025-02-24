@@ -7,26 +7,26 @@ import java.util.Map;
 
 public class WorldMap {
     private final int maxRow;
-    private final int maxCol;
+    private final int maxColumn;
     private final Map<Coordinates, Entity> entities;
 
-    public WorldMap(int maxRow, int maxCol) {
+    public WorldMap(int maxRow, int maxColumn) {
         this.maxRow = maxRow;
-        this.maxCol = maxCol;
-        entities = new HashMap<Coordinates, Entity>();
+        this.maxColumn = maxColumn;
+        entities = new HashMap<>();
     }
 
     public int getMaxRow() {
         return maxRow;
     }
 
-    public int getMaxCol() {
-        return maxCol;
+    public int getMaxColumn() {
+        return maxColumn;
     }
 
     public Entity getEntity(Coordinates coordinates) {
         // TODO: DRY
-        if (coordinates.getRow() >= maxRow || coordinates.getCol() >= maxCol) {
+        if (coordinates.getRow() >= maxRow || coordinates.getCol() >= maxColumn) {
             throw new IllegalArgumentException("Coordinates (%d, %d) in WorldMap out of bounds"
                     .formatted(coordinates.getRow(), coordinates.getCol()));
         }
@@ -41,7 +41,7 @@ public class WorldMap {
 
     public void addEntity(Coordinates coordinates, Entity entity) {
         // TODO: DRY
-        if (coordinates.getRow() >= maxRow || coordinates.getCol() >= maxCol) {
+        if (coordinates.getRow() >= maxRow || coordinates.getCol() >= maxColumn) {
             throw new IllegalArgumentException("Coordinates (%d, %d) in WorldMap out of bounds"
                     .formatted(coordinates.getRow(), coordinates.getCol()));
         }
@@ -59,7 +59,7 @@ public class WorldMap {
 
     public void removeEntity(Coordinates coordinates) {
         // TODO: DRY
-        if (coordinates.getRow() >= maxRow || coordinates.getCol() >= maxCol) {
+        if (coordinates.getRow() >= maxRow || coordinates.getCol() >= maxColumn) {
             throw new IllegalArgumentException("Coordinates (%d, %d) in WorldMap out of bounds"
                     .formatted(coordinates.getRow(), coordinates.getCol()));
         }

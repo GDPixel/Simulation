@@ -36,18 +36,14 @@ public class MoveAllCreaturesAction extends Action {
             }
             // TODO: check NULLpointer
             List<Coordinates> path = bfs.findPath();
-            // there's some cells between start and target
             creature.makeMove(path, worldMap);
-//            if (path.size() > 2) {
-//                creature.makeMove(path, worldMap);
-//            }
         }
     }
 
     private Set<Coordinates> getAllCoordinatesWithCreatures(WorldMap worldMap) {
         Set<Coordinates> allCoordinates = new HashSet<>();
         for (int row = 0; row < worldMap.getMaxRow(); row++) {
-            for (int col = 0; col < worldMap.getMaxCol(); col++) {
+            for (int col = 0; col < worldMap.getMaxColumn(); col++) {
                 Coordinates coordinates = new Coordinates(row, col);
                 if (!worldMap.isCellFree(coordinates)) {
                     Entity entity = worldMap.getEntity(coordinates);

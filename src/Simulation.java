@@ -1,6 +1,6 @@
 import action.Action;
-import action.CustomPopulateWorldAction;
 import action.MoveAllCreaturesAction;
+import action.PopulateWorldAction;
 import worldmap.WorldMap;
 
 import java.util.ArrayList;
@@ -13,12 +13,12 @@ public class Simulation {
     private final List<action.Action> initActions;
     private final List<action.Action> turnActions;
 
-    public Simulation() {
-        worldMap = new WorldMap(10, 15);
+    public Simulation(WorldMap worldMap) {
+        this.worldMap = worldMap;
         worldMapRenderer = new Renderer(worldMap);
         initActions = new ArrayList<>();
-        //initActions.add(new PopulateWorldAction(worldMap));
-        initActions.add(new CustomPopulateWorldAction(worldMap));
+        initActions.add(new PopulateWorldAction(worldMap));
+        //initActions.add(new CustomPopulateWorldAction(worldMap));
         turnActions = new ArrayList<>();
         turnActions.add(new MoveAllCreaturesAction(worldMap));
     }

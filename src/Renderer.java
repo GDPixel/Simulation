@@ -23,7 +23,7 @@ public class Renderer {
     Renderer(WorldMap worldMap) {
         this.worldMap = worldMap;
         this.maxRow = worldMap.getMaxRow();
-        this.maxCol = worldMap.getMaxCol();
+        this.maxCol = worldMap.getMaxColumn();
     }
 
     public void render() {
@@ -46,19 +46,13 @@ public class Renderer {
 
 
     private String toSprite(Entity entity) {
-        String result = "";
-        if (entity instanceof Rock) {
-            result = ROCK;
-        } else if (entity instanceof Grass) {
-            result = GRASS;
-        } else if (entity instanceof Tree) {
-            result = TREE;
-        } else if (entity instanceof Herbivore) {
-            result = HERBIVORE;
-        } else if (entity instanceof Predator) {
-            result = PREDATOR;
-        }
-
-        return result;
+        return switch (entity) {
+            case Rock rock -> ROCK;
+            case Grass grass -> GRASS;
+            case Tree tree -> TREE;
+            case Herbivore herbivore -> HERBIVORE;
+            case Predator predator -> PREDATOR;
+            default -> throw new IllegalArgumentException("Unknown entity type " + entity);
+        };
     }
 }

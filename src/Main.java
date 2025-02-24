@@ -1,6 +1,9 @@
+import worldmap.WorldMap;
+
 public class Main {
     public static void main(String[] args) {
-        Simulation simulation = new Simulation();
+        WorldMap worldMap = new WorldMap(12, 20);
+        Simulation simulation = new Simulation(worldMap);
         simulation.startSimulation();
     }
 }
