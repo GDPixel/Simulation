@@ -8,10 +8,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Predator extends Creature {
+    public static final int MAX_HEALTH = 10;
     private final int attackPower;
 
     public Predator() {
-        this(2, 10, 5);
+        this(2, MAX_HEALTH, 3);
     }
 
     public Predator(int speed, int hp, int attackPower) {

@@ -2,7 +2,7 @@ import worldmap.WorldMap;
 
 public class Main {
     public static void main(String[] args) {
-        WorldMap worldMap = new WorldMap(12, 20);
+        WorldMap worldMap = new WorldMap(10, 15);
         Simulation simulation = new Simulation(worldMap);
         simulation.startSimulation();
     }

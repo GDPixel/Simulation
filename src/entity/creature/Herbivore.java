@@ -9,13 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Herbivore extends Creature {
+    //TODO DRY with Predator, mb not, guees we cannot inheritance static fields, check it
+    public static final int MAX_HEALTH = 10;
 
     public Herbivore() {
-        super(4, 10);
-    }
-
-    public Herbivore(int speed, int hp) {
-        super(speed, hp);
+        super(4, MAX_HEALTH);
     }
 
     @Override
