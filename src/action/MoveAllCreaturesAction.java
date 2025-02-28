@@ -34,6 +34,11 @@ public class MoveAllCreaturesAction extends Action {
             }
             // TODO: check NULLpointer
             List<Coordinates> path = bfs.findPath();
+            // TODO: Null
+            if (path == null) {
+                System.out.println("Path: " + path);
+                throw new RuntimeException("BFS path is NULL");
+            }
             creature.makeMove(path, worldMap);
         }
     }

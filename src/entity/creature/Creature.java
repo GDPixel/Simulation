@@ -1,5 +1,6 @@
 package entity.creature;
 
+import entity.Eatable;
 import entity.Entity;
 import worldmap.Coordinates;
 import worldmap.WorldMap;
@@ -8,14 +9,19 @@ import worldmap.WorldMapUtil;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.lang.Math.min;
+
 public abstract class Creature extends Entity {
     private final int speed;
+    private final int maxHp;
     private int hp;
-    protected Class<? extends Entity> typeOfFood;
+    protected Class<? extends Eatable> typeOfFood;
 
-    public Creature(int speed, int hp, Class<? extends Entity> typeOfFood) {
+    public Creature(int speed, int maxHp, Class<? extends Eatable> typeOfFood) {
         this.speed = speed;
-        this.hp = hp;
+        this.maxHp = maxHp;
+        this.hp = maxHp;
+
         this.typeOfFood = typeOfFood;
     }
 
@@ -25,6 +31,10 @@ public abstract class Creature extends Entity {
 
     public int getHp() {
          return hp;
+    }
+
+    public boolean isAlive() {
+        return hp > 0;
     }
 
     public void makeMove(List<Coordinates> steps, WorldMap worldMap) {
@@ -46,6 +56,24 @@ public abstract class Creature extends Entity {
                     return typeOfFood.isInstance(entity);
                 })
                 .collect(Collectors.toList());
+    }
+
+    protected void eat(Coordinates position, Coordinates foodCell, WorldMap worldMap) {
+        //TODO: check if more than one food near
+        //super.makeMove(List.of(position, foodCells.getFirst()), worldMap);
+
+        Entity entity = worldMap.getEntity(foodCell);
+        if (entity instanceof Eatable food) {
+            System.out.println("Creature hp before eating is " + getHp());
+            setHp(min(getHp() + food.getHealthRestorationValue(), maxHp));
+            System.out.println("Creature hp is " + getHp());
+        }
+
+        //TODO: move entity from, to
+        worldMap.addEntity(foodCell, this);
+        worldMap.removeEntity(position);
+
+        System.out.println("Creature is eating : " + foodCell);
     }
 }
 

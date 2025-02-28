@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Simulation {
     private static final int MAX_TURN = 100;
-    private static final int APPLY_HUNGER_EVERY_TURNS = 5;
+    private static final int APPLY_HUNGER_EVERY_TURNS = 3;
     private final WorldMap worldMap;
     private final Renderer worldMapRenderer;
     private final List<action.Action> initActions;

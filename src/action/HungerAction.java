@@ -25,6 +25,9 @@ public class HungerAction extends Action {
             for (Coordinates creatureCoordinates : allCreaturesCoordinates) {
                 Creature creature = (Creature) worldMap.getEntity(creatureCoordinates);
                 creature.setHp(creature.getHp() - HUNGER_DAMAGE);
+                if (!creature.isAlive()) {
+                    worldMap.removeEntity(creatureCoordinates);
+                }
             }
         }
         currentTurn++;
