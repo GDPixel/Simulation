@@ -1,4 +1,4 @@
-package BFS;
+package bfs;
 
 import entity.Entity;
 import worldmap.Coordinates;
@@ -12,7 +12,7 @@ public class BFS {
     private final Coordinates start;
     private final Entity target;
 
-
+    // TODO use food Class instead of Entity target
     public BFS(WorldMap worldMap, Coordinates start, Entity target) {
         this.worldMap = worldMap;
         this.start = start;

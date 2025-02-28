@@ -1,19 +1,19 @@
 package entity.creature;
 
+import entity.Entity;
 import entity.Grass;
 import worldmap.Coordinates;
 import worldmap.WorldMap;
-import worldmap.WorldMapUtil;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class Herbivore extends Creature {
     //TODO DRY with Predator, mb not, guees we cannot inheritance static fields, check it
     public static final int MAX_HEALTH = 10;
+    private static final int DEFAULT_SPEED = 4;
+    private static final Class<? extends Entity> DEFAULT_FOOD = Grass.class;
 
     public Herbivore() {
-        super(4, MAX_HEALTH);
+        super(DEFAULT_SPEED, MAX_HEALTH, DEFAULT_FOOD);
     }
 
     @Override
@@ -33,22 +33,11 @@ public class Herbivore extends Creature {
         }
     }
 
-    private List<Coordinates> checkFoodNearBy(Coordinates coordinates, WorldMap worldMap) {
-        List<Coordinates> cellsAround = WorldMapUtil.getCellsAroundTarget(coordinates, worldMap);
-        List<Coordinates> foodCells = new ArrayList<>();
-        for (Coordinates cell : cellsAround) {
-            if (!worldMap.isCellFree(cell) && worldMap.getEntity(cell) instanceof Grass) {
-                foodCells.add(cell);
-            }
-        }
-        return foodCells;
-    }
-
     private void eat(Coordinates position, List<Coordinates> foodCells, WorldMap worldMap) {
         //super.makeMove(List.of(position, foodCells.getFirst()), worldMap);
         worldMap.addEntity(foodCells.getFirst(), this);
         worldMap.removeEntity(position);
-        System.out.println("eating : " + foodCells.getFirst());
+        System.out.println("Herbivore is eating : " + foodCells.getFirst());
     }
 }
 

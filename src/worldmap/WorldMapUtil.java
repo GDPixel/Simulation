@@ -1,5 +1,7 @@
 package worldmap;
 
+import entity.creature.Creature;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,5 +35,13 @@ public class WorldMapUtil {
     private static boolean isCellOnMap(Coordinates coordinates, WorldMap worldMap) {
         return coordinates.getRow() >= 0 && coordinates.getRow() < worldMap.getMaxRow()
                 && coordinates.getCol() >= 0 && coordinates.getCol() < worldMap.getMaxColumn();
+    }
+
+    public static List<Coordinates> getAllCoordinatesWithCreatures(WorldMap worldMap) {
+        List<Coordinates> allEntitiesCoordinates = worldMap.getAllCoordinatesWithEntities();
+        return allEntitiesCoordinates.stream()
+                .filter(x -> worldMap.getEntity(x) instanceof Creature)
+                .toList();
+
     }
 }

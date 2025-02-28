@@ -1,22 +1,23 @@
 package entity.creature;
 
+import entity.Entity;
 import worldmap.Coordinates;
 import worldmap.WorldMap;
-import worldmap.WorldMapUtil;
-
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Predator extends Creature {
     public static final int MAX_HEALTH = 10;
+    private static final int DEFAULT_SPEED = 4;
+    private static final int DEFAULT_ATTACK_POWER = 3;
+    private static final Class<? extends Entity> DEFAULT_FOOD = Herbivore.class;
     private final int attackPower;
 
     public Predator() {
-        this(2, MAX_HEALTH, 3);
+        this(DEFAULT_SPEED, MAX_HEALTH, DEFAULT_FOOD, DEFAULT_ATTACK_POWER);
     }
 
-    public Predator(int speed, int hp, int attackPower) {
-        super(speed, hp);
+    private Predator(int speed, int hp, Class<? extends Entity> typeOfFood, int attackPower) {
+        super(speed, hp, typeOfFood);
         this.attackPower = attackPower;
     }
 
@@ -37,26 +38,13 @@ public class Predator extends Creature {
         }
     }
 
-    private List<Coordinates> checkFoodNearBy(Coordinates coordinates, WorldMap worldMap) {
-        List<Coordinates> cellsAround = WorldMapUtil.getCellsAroundTarget(coordinates, worldMap);
-        return cellsAround.stream()
-                .filter(x -> worldMap.getEntity(x) instanceof Herbivore)
-                .collect(Collectors.toList());
-//        List<Coordinates> foodCells = new ArrayList<>();
-//        for (Coordinates cell : cellsAround) {
-//            if (!worldMap.isCellFree(cell) && worldMap.getEntity(cell) instanceof Herbivore) {
-//                foodCells.add(cell);
-//            }
-//        }
-        //return foodCells;
-    }
-
     private void attack(Coordinates position, List<Coordinates> foodCells, WorldMap worldMap) {
         //super.makeMove(List.of(position, foodCells.getFirst()), worldMap);
-        Herbivore herbivore = (Herbivore) worldMap.getEntity(foodCells.getFirst());
-        herbivore.setHp(herbivore.getHp() - attackPower);
-        System.out.println("attack : " + foodCells.getFirst() + " hp left: " + herbivore.getHp());
-        if (herbivore.getHp() <= 0) {
+
+        Creature creature = (Creature) worldMap.getEntity(foodCells.getFirst());
+        creature.setHp(creature.getHp() - attackPower);
+        System.out.println("attack : " + foodCells.getFirst() + " hp left: " + creature.getHp());
+        if (creature.getHp() <= 0) {
             worldMap.addEntity(foodCells.getFirst(), this);
             worldMap.removeEntity(position);
             System.out.println("Herbivore: " + position + " is dead");

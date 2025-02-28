@@ -1,6 +1,4 @@
-import action.Action;
-import action.MoveAllCreaturesAction;
-import action.PopulateWorldAction;
+import action.*;
 import worldmap.WorldMap;
 
 import java.util.ArrayList;
@@ -8,6 +6,7 @@ import java.util.List;
 
 public class Simulation {
     private static final int MAX_TURN = 100;
+    private static final int APPLY_HUNGER_EVERY_TURNS = 5;
     private final WorldMap worldMap;
     private final Renderer worldMapRenderer;
     private final List<action.Action> initActions;
@@ -20,6 +19,7 @@ public class Simulation {
         initActions.add(new PopulateWorldAction(worldMap));
         //initActions.add(new CustomPopulateWorldAction(worldMap));
         turnActions = new ArrayList<>();
+        turnActions.add(new HungerAction(worldMap, APPLY_HUNGER_EVERY_TURNS));
         turnActions.add(new MoveAllCreaturesAction(worldMap));
     }
 

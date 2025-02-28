@@ -19,7 +19,7 @@ public class PopulateWorldAction extends Action {
 
     @Override
     public void execute() {
-        populate(25 );
+        populate(15 );
     }
 
     private void populate(int fillPercent) {
@@ -81,13 +81,6 @@ public class PopulateWorldAction extends Action {
             }
         }
     }
-
 }
 
-class TestPopulateWorld {
-    public static void main(String[] args) {
-        PopulateWorldAction world = new PopulateWorldAction(new WorldMap(10, 10));
-        world.execute();
-    }
-}
 
