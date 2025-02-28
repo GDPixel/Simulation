@@ -5,25 +5,27 @@ import entity.creature.Herbivore;
 import entity.creature.Predator;
 import worldmap.Coordinates;
 import worldmap.WorldMap;
+import worldmap.WorldMapUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class PopulateWorldAction extends Action {
-    protected WorldMap worldMap;
+    private final WorldMap worldMap;
+    private final int fillPercentage;
 
-    public PopulateWorldAction(WorldMap worldMap) {
+    public PopulateWorldAction(WorldMap worldMap, int fillPercentage) {
         this.worldMap = worldMap;
+        this.fillPercentage = fillPercentage;
     }
 
     @Override
     public void execute() {
-        populate(15 );
+        populate();
     }
 
-    private void populate(int fillPercent) {
-        if (fillPercent < 0 || fillPercent > 100 ) {
+    private void populate() {
+        if (fillPercentage < 0 || fillPercentage > 100 ) {
             throw new IllegalArgumentException("fillPercent must be between 0 and 100");
         }
         int maxCoordinates = worldMap.getMaxRow() * worldMap.getMaxColumn();
@@ -37,22 +39,21 @@ public class PopulateWorldAction extends Action {
         entityTypes.add(Rock.class);
         entityTypes.add(Tree.class);
         int totalEntityTypes = entityTypes.size();
-        int eachEntityToAdd = (maxCoordinates * fillPercent / 100) / totalEntityTypes;
+        int eachEntityToAdd = (maxCoordinates * fillPercentage / 100) / totalEntityTypes;
         System.out.println("How many of each entity to add: " + eachEntityToAdd);
         int totalEntitiesToAdd = eachEntityToAdd * totalEntityTypes;
         System.out.println("Total entities to add: " + totalEntitiesToAdd);
 
         for (var entityType : entityTypes) {
             for (int i = 0; i < eachEntityToAdd; i++) {
-                Coordinates freeCell = getRandomFreeCell();
+                Coordinates freeCell = WorldMapUtil.getRandomFreeCell(worldMap);
                 worldMap.addEntity(freeCell, createEntity(entityType));
             }
         }
     }
 
-
     private Entity createEntity(Class<? extends Entity> clazz) {
-        // TODO: think how to refactor
+        // TODO: think how to refactor, look like pattern Factory
         if (clazz == Grass.class) {
             return new Grass();
         } else if (clazz == Rock.class) {
@@ -65,20 +66,6 @@ public class PopulateWorldAction extends Action {
             return new Predator();
         } else {
             throw new IllegalArgumentException("Unknown entity class: " + clazz);
-        }
-    }
-
-    private Coordinates getRandomFreeCell() {
-        Random rand = new Random();
-        while (true) {
-            int row = rand.nextInt(worldMap.getMaxRow());
-            int col = rand.nextInt(worldMap.getMaxColumn());
-            // TODO: don't like it every time create new Coordinate
-            // think what to do
-            Coordinates coordinates = new Coordinates(row, col);
-            if (worldMap.isCellFree(coordinates)) {
-                return coordinates;
-            }
         }
     }
 }

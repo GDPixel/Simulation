@@ -8,9 +8,12 @@ import entity.creature.Predator;
 import worldmap.Coordinates;
 import worldmap.WorldMap;
 
-public class CustomPopulateWorldAction extends PopulateWorldAction {
+public class CustomPopulateWorldAction extends Action {
+
+    private final WorldMap worldMap;
+
     public CustomPopulateWorldAction(WorldMap worldMap) {
-        super(worldMap);
+        this.worldMap = worldMap;
     }
 
     @Override

@@ -14,6 +14,9 @@ public class HungerAction extends Action {
     private int currentTurn = 1;
 
     public HungerAction(WorldMap worldMap, int frequency) {
+        if (frequency <= 0) {
+            throw new IllegalArgumentException("frequency must be greater than 0");
+        }
         this.worldMap = worldMap;
         this.frequency = frequency;
     }

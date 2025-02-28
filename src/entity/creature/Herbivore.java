@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Herbivore extends Creature implements Eatable {
     //TODO DRY with Predator, mb not, guees we cannot inheritance static fields, check it
-    public static final int MAX_HEALTH = 10;
+    public static final int MAX_HEALTH = 15;
     private static final int DEFAULT_SPEED = 4;
     private static final Class<? extends Eatable> DEFAULT_FOOD = Grass.class;
 

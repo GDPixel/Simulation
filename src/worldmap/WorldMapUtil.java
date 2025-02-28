@@ -4,6 +4,7 @@ import entity.creature.Creature;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class WorldMapUtil {
     private WorldMapUtil() {
@@ -43,5 +44,19 @@ public class WorldMapUtil {
                 .filter(x -> worldMap.getEntity(x) instanceof Creature)
                 .toList();
 
+    }
+
+    public static Coordinates getRandomFreeCell(WorldMap worldMap) {
+        Random rand = new Random();
+        while (true) {
+            int row = rand.nextInt(worldMap.getMaxRow());
+            int col = rand.nextInt(worldMap.getMaxColumn());
+            // TODO: don't like it every time create new Coordinate
+            // think what to do
+            Coordinates coordinates = new Coordinates(row, col);
+            if (worldMap.isCellFree(coordinates)) {
+                return coordinates;
+            }
+        }
     }
 }
