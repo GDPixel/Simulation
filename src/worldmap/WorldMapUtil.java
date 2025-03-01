@@ -1,52 +1,52 @@
 package worldmap;
 
 import entity.creature.Creature;
+import exception.WorldMapFullException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class WorldMapUtil {
+
     private WorldMapUtil() {
     }
 
-    public static List<Coordinates> getCellsAroundTarget(Coordinates target, WorldMap worldMap) {
-        ArrayList<Coordinates> cells = new ArrayList<>();
-        Coordinates leftUp = new Coordinates(target.getRow() - 1, target.getCol() - 1);
-        Coordinates up = new Coordinates(target.getRow() - 1, target.getCol());
-        Coordinates rightUp = new Coordinates(target.getRow() - 1, target.getCol() + 1);
+    public static List<Coordinates> getValidCellsAroundTarget(Coordinates target, WorldMap worldMap) {
+        List<Coordinates> surroundingCells = List.of(
+                new Coordinates(target.row() - 1, target.column() - 1),
+                new Coordinates(target.row() - 1, target.column()),
+                new Coordinates(target.row() - 1, target.column() + 1),
 
-        Coordinates left = new Coordinates(target.getRow(), target.getCol() - 1);
-        Coordinates right = new Coordinates(target.getRow(), target.getCol() + 1);
+                new Coordinates(target.row(), target.column() - 1),
+                new Coordinates(target.row(), target.column() + 1),
 
-        Coordinates leftDown = new Coordinates(target.getRow() + 1, target.getCol() - 1);
-        Coordinates down = new Coordinates(target.getRow() + 1, target.getCol());
-        Coordinates rightDown = new Coordinates(target.getRow() + 1, target.getCol() + 1);
+                new Coordinates(target.row() + 1, target.column() - 1),
+                new Coordinates(target.row() + 1, target.column()),
+                new Coordinates(target.row() + 1, target.column() + 1)
+        );
 
-        for (var coordinates : List.of(leftUp, up, rightUp, left, right, leftDown, down, rightDown)) {
-            // TODO: I got only valid cells, rename method or use two methods
-            if (isCellOnMap(coordinates, worldMap)) {
-                cells.add(coordinates);
-            }
-        }
-
-        return cells;
+        return surroundingCells.stream()
+                .filter(coordinates -> isCellOnMap(coordinates, worldMap))
+                .toList();
     }
 
     private static boolean isCellOnMap(Coordinates coordinates, WorldMap worldMap) {
-        return coordinates.getRow() >= 0 && coordinates.getRow() < worldMap.getMaxRow()
-                && coordinates.getCol() >= 0 && coordinates.getCol() < worldMap.getMaxColumn();
+        return coordinates.row() >= 0 && coordinates.row() < worldMap.getMaxRow()
+                && coordinates.column() >= 0 && coordinates.column() < worldMap.getMaxColumn();
     }
 
     public static List<Coordinates> getAllCoordinatesWithCreatures(WorldMap worldMap) {
         List<Coordinates> allEntitiesCoordinates = worldMap.getAllCoordinatesWithEntities();
         return allEntitiesCoordinates.stream()
-                .filter(x -> worldMap.getEntity(x) instanceof Creature)
+                .filter(c -> worldMap.getEntity(c) instanceof Creature)
                 .toList();
 
     }
 
     public static Coordinates getRandomFreeCell(WorldMap worldMap) {
+        if (worldMap.isFull()) {
+            throw new WorldMapFullException("WorldMap is full, can't get free cell");
+        }
         Random rand = new Random();
         while (true) {
             int row = rand.nextInt(worldMap.getMaxRow());

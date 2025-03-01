@@ -30,41 +30,17 @@ public class WorldMap {
     }
 
     public Entity getEntity(Coordinates coordinates) {
-        // TODO: DRY
-        if (coordinates.getRow() >= maxRow || coordinates.getCol() >= maxColumn) {
-            throw new IllegalArgumentException("Coordinates (%d, %d) in WorldMap out of bounds"
-                    .formatted(coordinates.getRow(), coordinates.getCol()));
-        }
-
-        if (coordinates.getRow() < 0 || coordinates.getCol() < 0) {
-            throw new IllegalArgumentException("Coordinates (%d, %d) in WorldMap can't be negative"
-                    .formatted(coordinates.getRow(), coordinates.getCol()));
-        }
-
+        validateCoordinates(coordinates);
         return entities.get(coordinates);
     }
 
     public void addEntity(Coordinates coordinates, Entity entity) {
-        // TODO: DRY
-        if (coordinates.getRow() >= maxRow || coordinates.getCol() >= maxColumn) {
-            throw new IllegalArgumentException("Coordinates (%d, %d) in WorldMap out of bounds"
-                    .formatted(coordinates.getRow(), coordinates.getCol()));
-        }
-
-        if (coordinates.getRow() < 0 || coordinates.getCol() < 0) {
-            throw new IllegalArgumentException("Coordinates (%d, %d) in WorldMap can't be negative"
-                    .formatted(coordinates.getRow(), coordinates.getCol()));
-        }
+        validateCoordinates(coordinates);
         entities.put(coordinates, entity);
     }
 
     public List<Coordinates> getAllCoordinatesWithEntities() {
-        List<Coordinates> coordinateWithEntities = new ArrayList<>();
-        for (Coordinates coordinates : entities.keySet()) {
-            coordinateWithEntities.add(coordinates);
-        }
-
-        return coordinateWithEntities;
+        return new ArrayList<>(entities.keySet());
     }
 
     public boolean isCellFree(Coordinates coordinates) {
@@ -72,18 +48,24 @@ public class WorldMap {
     }
 
     public void removeEntity(Coordinates coordinates) {
-        // TODO: DRY
-        if (coordinates.getRow() >= maxRow || coordinates.getCol() >= maxColumn) {
-            throw new IllegalArgumentException("Coordinates (%d, %d) in WorldMap out of bounds"
-                    .formatted(coordinates.getRow(), coordinates.getCol()));
-        }
-
-        if (coordinates.getRow() < 0 || coordinates.getCol() < 0) {
-            throw new IllegalArgumentException("Coordinates (%d, %d) in WorldMap can't be negative"
-                    .formatted(coordinates.getRow(), coordinates.getCol()));
-        }
-
+        validateCoordinates(coordinates);
         entities.remove(coordinates);
+    }
+
+    private void validateCoordinates(Coordinates coordinates) {
+        if (coordinates.row() >= maxRow || coordinates.column() >= maxColumn) {
+            throw new IllegalArgumentException("Coordinates (%d, %d) in WorldMap out of bounds"
+                    .formatted(coordinates.row(), coordinates.column()));
+        }
+
+        if (coordinates.row() < 0 || coordinates.column() < 0) {
+            throw new IllegalArgumentException("Coordinates (%d, %d) in WorldMap can't be negative"
+                    .formatted(coordinates.row(), coordinates.column()));
+        }
+    }
+
+    public boolean isFull() {
+        return maxRow * maxColumn <= entities.size();
     }
 }
 

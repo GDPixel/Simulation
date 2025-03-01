@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import static java.lang.Math.min;
 
 public abstract class Creature extends Entity {
+
     private final int speed;
     private final int maxHp;
     private int hp;
@@ -23,6 +24,10 @@ public abstract class Creature extends Entity {
         this.hp = maxHp;
 
         this.typeOfFood = typeOfFood;
+    }
+
+    public int getMaxHp() {
+        return maxHp;
     }
 
     public void setHp(int hp) {
@@ -49,7 +54,7 @@ public abstract class Creature extends Entity {
     }
 
     protected List<Coordinates> checkFoodNearBy(Coordinates coordinates, WorldMap worldMap) {
-        List<Coordinates> cellsAround = WorldMapUtil.getCellsAroundTarget(coordinates, worldMap);
+        List<Coordinates> cellsAround = WorldMapUtil.getValidCellsAroundTarget(coordinates, worldMap);
         return cellsAround.stream()
                 .filter(x -> {
                     Entity entity = worldMap.getEntity(x);

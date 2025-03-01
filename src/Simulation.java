@@ -16,11 +16,11 @@ public class Simulation {
         this.worldMap = worldMap;
         worldMapRenderer = new Renderer(worldMap);
         initActions = new ArrayList<>();
-        initActions.add(new PopulateWorldAction(worldMap, 20));
+        initActions.add(new PopulateWorldAction(worldMap, 30));
         //initActions.add(new CustomPopulateWorldAction(worldMap));
         turnActions = new ArrayList<>();
-        turnActions.add(new HungerAction(worldMap, APPLY_HUNGER_EVERY_TURNS));
-        turnActions.add(new GrowGrassAction(worldMap, 1, 1));
+        turnActions.add(new HungerAction(worldMap, APPLY_HUNGER_EVERY_TURNS, 1));
+        turnActions.add(new GrowGrassAction(worldMap, 2, 3));
         turnActions.add(new MoveAllCreaturesAction(worldMap));
     }
 

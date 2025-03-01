@@ -8,17 +8,23 @@ import worldmap.WorldMapUtil;
 import java.util.List;
 
 public class HungerAction extends Action {
-    private static final int HUNGER_DAMAGE = 1;
     private final WorldMap worldMap;
     private final int frequency;
+    private final int hungerDamage;
     private int currentTurn = 1;
 
-    public HungerAction(WorldMap worldMap, int frequency) {
+    public HungerAction(WorldMap worldMap, int frequency, int hungerDamage) {
         if (frequency <= 0) {
             throw new IllegalArgumentException("frequency must be greater than 0");
         }
+
+        if (hungerDamage <= 0) {
+            throw new IllegalArgumentException("hungerDamage must be greater than 0");
+        }
+
         this.worldMap = worldMap;
         this.frequency = frequency;
+        this.hungerDamage = hungerDamage;
     }
 
 
@@ -27,7 +33,7 @@ public class HungerAction extends Action {
             List<Coordinates> allCreaturesCoordinates = WorldMapUtil.getAllCoordinatesWithCreatures(worldMap);
             for (Coordinates creatureCoordinates : allCreaturesCoordinates) {
                 Creature creature = (Creature) worldMap.getEntity(creatureCoordinates);
-                creature.setHp(creature.getHp() - HUNGER_DAMAGE);
+                creature.setHp(creature.getHp() - hungerDamage);
                 if (!creature.isAlive()) {
                     worldMap.removeEntity(creatureCoordinates);
                 }

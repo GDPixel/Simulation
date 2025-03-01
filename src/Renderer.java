@@ -9,10 +9,11 @@ import worldmap.Coordinates;
 import worldmap.WorldMap;
 
 public class Renderer {
-    public static final String ANSI_GREEN_SQUARE_BACKGROUND = "\u001B[0;42m";
-    public static final String ANSI_RED_SQUARE_BACKGROUND = "\u001B[0;101m";
+    public static final String ANSI_GREEN_BACKGROUND = "\u001B[0;42m";
+    public static final String ANSI_RED_BACKGROUND = "\u001B[0;101m";
     public static final String ANSI_YELLOW_BACKGROUND = "\u001B[0;103m";
     public static final String ANSI_RESET = "\u001B[0m";
+
     private static final String FREE_CELL = "⬛";
     private static final String ROCK = "\uD83D\uDDFB";
     private static final String TREE = "\uD83C\uDF33";
@@ -22,6 +23,7 @@ public class Renderer {
 
     private static final double LOW_HP_RATE = 0.3;
     private static final double MIDDLE_HP_RATE = 0.6;
+
     private final WorldMap worldMap;
     private final int maxCol;
     private final int maxRow;
@@ -33,21 +35,22 @@ public class Renderer {
     }
 
     public void render() {
-        //Map<Coordinates, Entity> entities = worldMap.getEntities();
         // TODO: stringbuilder
         for (int row = 0; row < maxRow; row++) {
-            System.out.print(ANSI_GREEN_SQUARE_BACKGROUND);
+            StringBuilder line = new StringBuilder();
+            line.append(ANSI_GREEN_BACKGROUND);
             for (int col = 0; col < maxCol; col++) {
                 Coordinates coordinates = new Coordinates(row, col);
                 if (worldMap.isCellFree(coordinates)) {
-                    System.out.print(FREE_CELL);
+                    line.append(FREE_CELL);
                 } else {
                     Entity entity = worldMap.getEntity(coordinates);
                     String sprite = toSprite(entity);
-                    System.out.print(sprite);
+                    line.append(sprite);
                 }
             }
-            System.out.println(ANSI_RESET);
+            line.append(ANSI_RESET);
+            System.out.println(line);
         }
     }
 
@@ -66,8 +69,8 @@ public class Renderer {
     // TODO: refactor
     private String colorCreatureHP(Creature creature) {
         return switch (creature) {
-            case Herbivore herbivore -> colorHP(herbivore.getHp(), Herbivore.MAX_HEALTH, HERBIVORE);
-            case Predator predator -> colorHP(predator.getHp(), Predator.MAX_HEALTH, PREDATOR);
+            case Herbivore herbivore -> colorHP(herbivore.getHp(), herbivore.getMaxHp(), HERBIVORE);
+            case Predator predator -> colorHP(predator.getHp(), predator.getMaxHp(), PREDATOR);
             default -> throw new IllegalArgumentException("Unknown entity type " + creature);
         };
     }
@@ -77,9 +80,9 @@ public class Renderer {
         double hpLeftRate = (double) currentHp / maxHp;
 
         if (hpLeftRate < LOW_HP_RATE) {
-            return ANSI_RED_SQUARE_BACKGROUND + creatureSprite + ANSI_GREEN_SQUARE_BACKGROUND;
+            return ANSI_RED_BACKGROUND + creatureSprite + ANSI_GREEN_BACKGROUND;
         } else if (hpLeftRate < MIDDLE_HP_RATE) {
-            return ANSI_YELLOW_BACKGROUND + creatureSprite + ANSI_GREEN_SQUARE_BACKGROUND;
+            return ANSI_YELLOW_BACKGROUND + creatureSprite + ANSI_GREEN_BACKGROUND;
         } else {
             return creatureSprite;
         }

@@ -6,18 +6,18 @@ import worldmap.WorldMap;
 import java.util.List;
 
 public class Predator extends Creature {
-    public static final int MAX_HEALTH = 10;
+    private static final int DEFAULT_MAX_HEALTH = 10;
     private static final int DEFAULT_SPEED = 3;
     private static final int DEFAULT_ATTACK_POWER = 3;
     private static final Class<? extends Eatable> DEFAULT_FOOD = Herbivore.class;
     private final int attackPower;
 
     public Predator() {
-        this(DEFAULT_SPEED, MAX_HEALTH, DEFAULT_FOOD, DEFAULT_ATTACK_POWER);
+        this(DEFAULT_ATTACK_POWER);
     }
 
-    private Predator(int speed, int hp, Class<? extends Eatable> typeOfFood, int attackPower) {
-        super(speed, hp, typeOfFood);
+    public Predator(int attackPower) {
+        super(DEFAULT_SPEED, DEFAULT_MAX_HEALTH, DEFAULT_FOOD);
         this.attackPower = attackPower;
     }
 

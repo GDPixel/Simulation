@@ -7,18 +7,19 @@ import worldmap.WorldMap;
 import java.util.List;
 
 public class Herbivore extends Creature implements Eatable {
-    //TODO DRY with Predator, mb not, guees we cannot inheritance static fields, check it
-    public static final int MAX_HEALTH = 15;
+
+    private static final int DEFAULT_MAX_HEALTH = 15;
     private static final int DEFAULT_SPEED = 4;
+    private static final int HEALTH_RESTORATION_VALUE = 5;
     private static final Class<? extends Eatable> DEFAULT_FOOD = Grass.class;
 
     public Herbivore() {
-        super(DEFAULT_SPEED, MAX_HEALTH, DEFAULT_FOOD);
+        super(DEFAULT_SPEED, DEFAULT_MAX_HEALTH, DEFAULT_FOOD);
     }
 
     @Override
     public int getHealthRestorationValue() {
-        return 5;
+        return HEALTH_RESTORATION_VALUE;
     }
 
     @Override

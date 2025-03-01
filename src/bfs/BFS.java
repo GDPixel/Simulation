@@ -31,7 +31,7 @@ public class BFS {
                 return reconstructPath(backTrace, currentCoordinates, start);
             }
 
-            List<Coordinates> adjacentCells = WorldMapUtil.getCellsAroundTarget(currentCoordinates, worldMap);
+            List<Coordinates> adjacentCells = WorldMapUtil.getValidCellsAroundTarget(currentCoordinates, worldMap);
             for (Coordinates adjacentCell : adjacentCells) {
                 if ((!visited.contains(adjacentCell))
                         && (worldMap.isCellFree(adjacentCell)
