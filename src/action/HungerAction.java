@@ -13,7 +13,7 @@ public class HungerAction extends Action {
     private final int hungerDamage;
     private int currentTurn = 1;
 
-    public HungerAction(WorldMap worldMap, int frequency, int hungerDamage) {
+    public HungerAction(WorldMap worldMap, int hungerDamage, int frequency) {
         if (frequency <= 0) {
             throw new IllegalArgumentException("frequency must be greater than 0");
         }
