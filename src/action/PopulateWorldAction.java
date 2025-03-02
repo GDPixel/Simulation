@@ -11,20 +11,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PopulateWorldAction extends Action {
-    private final WorldMap worldMap;
     private final int fillPercentage;
 
-    public PopulateWorldAction(WorldMap worldMap, int fillPercentage) {
-        this.worldMap = worldMap;
+    public PopulateWorldAction(int fillPercentage) {
         this.fillPercentage = fillPercentage;
     }
 
     @Override
-    public void execute() {
-        populate();
+    public void execute(WorldMap worldMap) {
+        populate(worldMap);
     }
 
-    private void populate() {
+    private void populate(WorldMap worldMap) {
         if (fillPercentage < 0 || fillPercentage > 100 ) {
             throw new IllegalArgumentException("fillPercent must be between 0 and 100");
         }

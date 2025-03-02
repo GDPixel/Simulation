@@ -12,15 +12,13 @@ import worldmap.WorldMapUtil;
 import java.util.List;
 
 public class MoveAllCreaturesAction extends Action {
-    private final WorldMap worldMap;
 
     // TODO: may inject moving algorithm BFS or A*
-    public MoveAllCreaturesAction(WorldMap worldMap) {
-        this.worldMap = worldMap;
+    public MoveAllCreaturesAction() {
     }
 
     @Override
-    public void execute() {
+    public void execute(WorldMap worldMap) {
         List<Coordinates> allCreatures = WorldMapUtil.getAllCoordinatesWithCreatures(worldMap);
         for (Coordinates creaturePosition : allCreatures) {
             BFS bfs = null;

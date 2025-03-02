@@ -10,18 +10,12 @@ import worldmap.WorldMap;
 
 public class CustomPopulateWorldAction extends Action {
 
-    private final WorldMap worldMap;
-
-    public CustomPopulateWorldAction(WorldMap worldMap) {
-        this.worldMap = worldMap;
-    }
-
     @Override
-    public void execute() {
-        custom10x15();
+    public void execute(WorldMap worldMap) {
+        custom10x15(worldMap);
     }
 
-    private void custom10x15() {
+    private void custom10x15(WorldMap worldMap) {
         worldMap.addEntity(new Coordinates(1, 4), new Tree());
         worldMap.addEntity(new Coordinates(1, 6), new Grass());
         worldMap.addEntity(new Coordinates(2, 1), new Rock());
@@ -35,7 +29,7 @@ public class CustomPopulateWorldAction extends Action {
         worldMap.addEntity(new Coordinates(9, 14), new Predator());
     }
 
-    private void custom7x7() {
+    private void custom7x7(WorldMap worldMap) {
         worldMap.addEntity(new Coordinates(3, 0), new Grass());
         worldMap.addEntity(new Coordinates(1, 6), new Grass());
         worldMap.addEntity(new Coordinates(6, 2), new Grass());
@@ -49,7 +43,7 @@ public class CustomPopulateWorldAction extends Action {
         worldMap.addEntity(new Coordinates(3, 6), new Tree());
     }
 
-    private void custom5x5() {
+    private void custom5x5(WorldMap worldMap) {
         worldMap.addEntity(new Coordinates(0, 1), new Predator());
         worldMap.addEntity(new Coordinates(1, 1), new Tree());
         //worldMap.addEntity(new Coordinates(1,3), new Grass());

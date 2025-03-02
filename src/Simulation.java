@@ -1,38 +1,31 @@
 import action.*;
 import worldmap.WorldMap;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Simulation {
     private static final int MAX_TURN = 100;
-    private static final int APPLY_HUNGER_EVERY_TURNS = 3;
     private final WorldMap worldMap;
     private final Renderer worldMapRenderer;
-    private final List<action.Action> initActions;
-    private final List<action.Action> turnActions;
+    private final List<Action> initActions;
+    private final List<Action> turnActions;
 
-    public Simulation(WorldMap worldMap) {
+    public Simulation(WorldMap worldMap, List<Action> initActions, List<Action> turnActions) {
         this.worldMap = worldMap;
+        this.initActions = initActions;
+        this.turnActions = turnActions;
         worldMapRenderer = new Renderer(worldMap);
-        initActions = new ArrayList<>();
-        initActions.add(new PopulateWorldAction(worldMap, 30));
-        //initActions.add(new CustomPopulateWorldAction(worldMap));
-        turnActions = new ArrayList<>();
-        turnActions.add(new HungerAction(worldMap, APPLY_HUNGER_EVERY_TURNS, 1));
-        turnActions.add(new GrowGrassAction(worldMap, 2, 3));
-        turnActions.add(new MoveAllCreaturesAction(worldMap));
     }
 
     public void nextTurn() {
         for (Action action : turnActions) {
-            action.execute();
+            action.execute(worldMap);
         }
     }
 
     public void startSimulation() {
-        for (action.Action action : initActions) {
-            action.execute();
+        for (Action action : initActions) {
+            action.execute(worldMap);
         }
 
         for (int turn = 0; turn < MAX_TURN; turn++) {

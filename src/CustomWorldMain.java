@@ -3,16 +3,16 @@ import worldmap.WorldMap;
 
 import java.util.List;
 
-public class Main {
+public class CustomWorldMain {
     public static void main(String[] args) {
-        WorldMap worldMap = new WorldMap(12, 20);
+        WorldMap worldMap = new WorldMap(10, 15);
 
         List<Action> initActions = List.of(
-                new PopulateWorldAction(30));
+                new CustomPopulateWorldAction());
 
         List<action.Action> turnActions = List.of(
                 new HungerAction(1, 3),
-                new GrowGrassAction(2, 3),
+                new GrowGrassAction(1, 3),
                 new MoveAllCreaturesAction());
 
         Simulation simulation = new Simulation(worldMap, initActions, turnActions);
