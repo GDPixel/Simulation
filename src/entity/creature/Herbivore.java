@@ -23,22 +23,18 @@ public class Herbivore extends Creature implements Eatable {
     }
 
     @Override
-    public void makeMove(List<Coordinates> steps, WorldMap worldMap) {
-        // TODO: DRY and possible null
-        if (!steps.isEmpty()) {
-            List<Coordinates> foodCells = checkFoodNearBy(steps.getFirst(), worldMap);
-            if (!foodCells.isEmpty()) {
-                //TODO: choose random food if more than one nearby
-                Coordinates foodCell = foodCells.getFirst();
-                eat(steps.getFirst(), foodCell, worldMap);
-            } else {
-                super.makeMove(steps, worldMap);
-                System.out.println("Herbivore is moving toward: " + steps.getLast());
-                // TODO: possible bug remove creature if it cant move
-            }
+    public void makeMove(Coordinates position, WorldMap worldMap) {
+        List<Coordinates> foodCells = checkFoodNearBy(position, worldMap);
+        if (!foodCells.isEmpty()) {
+            //TODO: choose random food if more than one nearby
+            Coordinates foodCell = foodCells.getFirst();
+            eat(position, foodCell, worldMap);
         } else {
-            // TODO: if no food on the map move random some steps
+            super.makeMove(position, worldMap);
+            //System.out.println("Predator is moving toward: " + steps.getLast());
+            // TODO: possible bug remove creature if it cant move
         }
+        // TODO: if no food on the map move random some steps
     }
 }
 

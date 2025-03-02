@@ -1,5 +1,6 @@
 package bfs;
 
+import entity.Eatable;
 import entity.Entity;
 import worldmap.Coordinates;
 import worldmap.WorldMap;
@@ -10,10 +11,10 @@ import java.util.*;
 public class BFS {
     private final WorldMap worldMap;
     private final Coordinates start;
-    private final Entity target;
+    private final Class<? extends Eatable> target;
 
     // TODO use food Class instead of Entity target
-    public BFS(WorldMap worldMap, Coordinates start, Entity target) {
+    public BFS(WorldMap worldMap, Coordinates start, Class<? extends Eatable>  target) {
         this.worldMap = worldMap;
         this.start = start;
         this.target = target;
@@ -27,7 +28,7 @@ public class BFS {
         while (!queue.isEmpty()) {
             Coordinates currentCoordinates = queue.remove();
             visited.add(currentCoordinates);
-            if (!worldMap.isCellFree(currentCoordinates) && worldMap.getEntity(currentCoordinates).getClass() == target.getClass()) {
+            if (!worldMap.isCellFree(currentCoordinates) && worldMap.getEntity(currentCoordinates).getClass() == target) {
                 return reconstructPath(backTrace, currentCoordinates, start);
             }
 
@@ -35,7 +36,7 @@ public class BFS {
             for (Coordinates adjacentCell : adjacentCells) {
                 if ((!visited.contains(adjacentCell))
                         && (worldMap.isCellFree(adjacentCell)
-                        || (worldMap.getEntity(adjacentCell).getClass() == target.getClass()))) {
+                        || (worldMap.getEntity(adjacentCell).getClass() == target))) {
                     queue.add(adjacentCell);
                     backTrace.put(adjacentCell, currentCoordinates);
                 }
