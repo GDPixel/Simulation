@@ -9,7 +9,7 @@ import java.util.List;
 public class Herbivore extends Creature implements Eatable {
 
     private static final int DEFAULT_MAX_HEALTH = 15;
-    private static final int DEFAULT_SPEED = 4;
+    private static final int DEFAULT_SPEED = 5;
     private static final int HEALTH_RESTORATION_VALUE = 5;
     private static final Class<? extends Eatable> DEFAULT_FOOD = Grass.class;
 
@@ -25,6 +25,7 @@ public class Herbivore extends Creature implements Eatable {
     @Override
     public void makeMove(Coordinates position, WorldMap worldMap) {
         List<Coordinates> foodCells = checkFoodNearBy(position, worldMap);
+        System.out.println("Herbivore's Food: " + foodCells);
         if (!foodCells.isEmpty()) {
             //TODO: choose random food if more than one nearby
             Coordinates foodCell = foodCells.getFirst();

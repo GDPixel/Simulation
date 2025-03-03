@@ -17,11 +17,13 @@ public class CustomPopulateWorldAction extends Action {
 
     private void custom10x15(WorldMap worldMap) {
         worldMap.addEntity(new Coordinates(1, 4), new Tree());
-        worldMap.addEntity(new Coordinates(1, 6), new Grass());
+        worldMap.addEntity(new Coordinates(1, 9), new Grass());
         worldMap.addEntity(new Coordinates(2, 1), new Rock());
         worldMap.addEntity(new Coordinates(2, 5), new Herbivore());
-        worldMap.addEntity(new Coordinates(3, 7), new Grass());
+        worldMap.addEntity(new Coordinates(2, 12), new Tree());
         worldMap.addEntity(new Coordinates(3, 6), new Tree());
+        worldMap.addEntity(new Coordinates(3, 7), new Grass());
+        worldMap.addEntity(new Coordinates(4, 5), new Tree());
         worldMap.addEntity(new Coordinates(5, 8), new Predator());
         worldMap.addEntity(new Coordinates(6, 2), new Grass());
         worldMap.addEntity(new Coordinates(7, 5), new Herbivore());

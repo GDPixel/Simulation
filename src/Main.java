@@ -12,7 +12,7 @@ public class Main {
 
         List<action.Action> turnActions = List.of(
                 new HungerAction(1, 3),
-                new GrowGrassAction(2, 3),
+                new GrowGrassAction(4, 1),
                 new MoveAllCreaturesAction());
 
         Simulation simulation = new Simulation(worldMap, initActions, turnActions);

@@ -26,6 +26,7 @@ public class Predator extends Creature {
     public void makeMove(Coordinates position, WorldMap worldMap) {
         List<Coordinates> foodCells = checkFoodNearBy(position, worldMap);
         if (!foodCells.isEmpty()) {
+            System.out.println("Predator's Food: " + foodCells);
             attack(position, foodCells, worldMap);
         } else {
             super.makeMove(position, worldMap);
@@ -43,7 +44,7 @@ public class Predator extends Creature {
         // TODO: get random cell if more than one food near
         Coordinates foodCell = foodCells.getFirst();
         System.out.println("attack : " + foodCell + " hp left: " + creature.getHp());
-        if (!creature.isAlive()) {
+        if (creature.isDead()) {
             eat(position, foodCell, worldMap);
         }
     }

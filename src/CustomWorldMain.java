@@ -12,7 +12,7 @@ public class CustomWorldMain {
 
         List<action.Action> turnActions = List.of(
                 new HungerAction(1, 3),
-                new GrowGrassAction(1, 3),
+                new GrowGrassAction(1, 1),
                 new MoveAllCreaturesAction());
 
         Simulation simulation = new Simulation(worldMap, initActions, turnActions);

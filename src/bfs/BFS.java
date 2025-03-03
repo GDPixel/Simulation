@@ -1,26 +1,15 @@
 package bfs;
 
 import entity.Eatable;
-import entity.Entity;
 import worldmap.Coordinates;
 import worldmap.WorldMap;
 import worldmap.WorldMapUtil;
 
 import java.util.*;
 
-public class BFS {
-    private final WorldMap worldMap;
-    private final Coordinates start;
-    private final Class<? extends Eatable> target;
+public class BFS implements Search {
 
-    // TODO use food Class instead of Entity target
-    public BFS(WorldMap worldMap, Coordinates start, Class<? extends Eatable>  target) {
-        this.worldMap = worldMap;
-        this.start = start;
-        this.target = target;
-    }
-
-    public List<Coordinates> findPath() {
+    public List<Coordinates> findPath(WorldMap worldMap, Coordinates start, Class<? extends Eatable> target) {
         Set<Coordinates> visited = new HashSet<>();
         Queue<Coordinates> queue = new LinkedList<>();
         queue.add(start);
