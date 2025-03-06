@@ -7,9 +7,9 @@ import main.worldmap.WorldMapUtil;
 
 import java.util.*;
 
-public class BFS implements Search {
+public class BFSPathfinder implements Pathfinder {
 
-    public List<Coordinates> findPath(WorldMap worldMap, Coordinates start, Class<? extends Eatable> target) {
+    public List<Coordinates> find(WorldMap worldMap, Coordinates start, Class<? extends Eatable> target) {
         Set<Coordinates> visited = new HashSet<>();
         Queue<Coordinates> queue = new LinkedList<>();
         queue.add(start);

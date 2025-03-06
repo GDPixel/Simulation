@@ -7,10 +7,19 @@ import main.worldmap.WorldMapUtil;
 
 import java.util.*;
 
-public class AStar implements Search {
+public class AStarPathfinder implements Pathfinder {
 
     @Override
-    public List<Coordinates> findPath(WorldMap worldMap, Coordinates start, Class<? extends Eatable> target) {
+    public List<Coordinates> find(WorldMap worldMap, Coordinates start, Class<? extends Eatable> target) {
+
+        long totalTargets = worldMap.getAllCoordinatesWithEntities().stream()
+                .filter(coordinates -> worldMap.getEntity(coordinates).getClass() == target)
+                .count();
+
+        if (totalTargets == 0) {
+            return Collections.emptyList();
+        }
+
         Set<Coordinates> visited = new HashSet<>();
         PriorityQueue<Node> openSet = new PriorityQueue<>(Comparator.comparingInt(node -> node.f));
         Map<Coordinates, Coordinates> backTrace = new HashMap<>();
@@ -54,28 +63,35 @@ public class AStar implements Search {
             }
         }
 
-        return Collections.emptyList(); // No path found
+        return Collections.emptyList();
     }
 
     private int heuristic(Coordinates a, Class<? extends Eatable> target, WorldMap worldMap) {
-        // Assuming you have a method to find the target's coordinates in the world map
         //TODO: what if we have no target on the map
-        Coordinates targetCoordinates = findTargetCoordinates(a, target, worldMap); // Implement this method based on your game logic
+        Coordinates targetCoordinates = findTargetCoordinates(a, target, worldMap);
 
-        // Calculate Chebyshev distance to the target
-        return Math.max(Math.abs(a.row() - targetCoordinates.row()), Math.abs(a.column() - targetCoordinates.column()));
+        return chebyshevDistance(a, targetCoordinates);
     }
+
+    // Chebyshev distance is more appropriate, because diagonal moves are allowed
+    private int chebyshevDistance(Coordinates a, Coordinates b) {
+        return Math.max(Math.abs(a.row() - b.row()), Math.abs(a.column() - b.column()));
+    }
+
 
     private Coordinates findTargetCoordinates(Coordinates start, Class<? extends Eatable> target, WorldMap
             worldMap) {
         Coordinates closestTarget = null;
         int minDistance = Integer.MAX_VALUE;
-
         // Iterate through the world map to find all target main.entity's coordinates
+
+        // my try to use stream
+        //worldMap.getAllCoordinatesWithEntities().stream()
+        //       .filter(coordinates -> (worldMap.getEntity(coordinates).getClass()) == target)
+
         for (Coordinates coordinates : worldMap.getAllCoordinatesWithEntities()) {
             if (worldMap.getEntity(coordinates).getClass() == target) {
-                // Calculate the distance from the start position to this target
-                int distance = Math.abs(start.row() - coordinates.row()) + Math.abs(start.column() - coordinates.column());
+                int distance = chebyshevDistance(start, coordinates);
                 if (distance < minDistance) {
                     minDistance = distance;
                     closestTarget = coordinates;

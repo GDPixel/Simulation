@@ -1,7 +1,7 @@
 package main.entity.creature;
 
-import main.bfs.AStar;
-import main.bfs.Search;
+import main.bfs.AStarPathfinder;
+import main.bfs.Pathfinder;
 import main.entity.Eatable;
 import main.entity.Entity;
 import main.worldmap.Coordinates;
@@ -18,7 +18,7 @@ public abstract class Creature extends Entity {
     private final int maxHp;
     private int hp;
     private final Class<? extends Eatable> typeOfFood;
-    private final Search bfs = new AStar();
+    private final Pathfinder pathfinder = new AStarPathfinder();
 
     public Creature(int speed, int maxHp, Class<? extends Eatable> typeOfFood) {
         this.speed = speed;
@@ -45,7 +45,7 @@ public abstract class Creature extends Entity {
     }
 
     public void makeMove(Coordinates position, WorldMap worldMap) {
-        List<Coordinates> path = bfs.findPath(worldMap, position, typeOfFood);
+        List<Coordinates> path = pathfinder.find(worldMap, position, typeOfFood);
         if (!path.isEmpty()) {
            // System.out.println(this.getClass().getSimpleName() + " is moving toward: " + path.getLast());
             // TODO: think of moving toward food if food last step stay close to it (step.size() - 2)

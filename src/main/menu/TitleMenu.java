@@ -12,7 +12,7 @@ public class TitleMenu extends Menu {
     }
 
     public void initialize() {
-        addItem("startSimulation", simulation::startSimulation);
+        addItem("Start", simulation::startSimulation);
         addItem("Exit", () -> {
         });
     }

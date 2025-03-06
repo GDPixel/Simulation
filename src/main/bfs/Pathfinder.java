@@ -6,6 +6,6 @@ import main.worldmap.WorldMap;
 
 import java.util.List;
 
-public interface Search {
-    List<Coordinates> findPath(WorldMap worldMap, Coordinates start, Class<? extends Eatable> target);
+public interface Pathfinder {
+    List<Coordinates> find(WorldMap worldMap, Coordinates start, Class<? extends Eatable> target);
 }
