@@ -30,12 +30,20 @@ public class WorldMap {
     }
 
     public Entity getEntity(Coordinates coordinates) {
-        validateCoordinates(coordinates);
+        if (!isCoordinateValid(coordinates)) {
+            throw new IllegalArgumentException("Coordinates (%d, %d) in WorldMap out of bounds"
+                    .formatted(coordinates.row(), coordinates.column()));
+        }
+
         return entities.get(coordinates);
     }
 
     public void addEntity(Coordinates coordinates, Entity entity) {
-        validateCoordinates(coordinates);
+        if (!isCoordinateValid(coordinates)) {
+            throw new IllegalArgumentException("Coordinates (%d, %d) in WorldMap out of bounds"
+                    .formatted(coordinates.row(), coordinates.column()));
+        }
+
         entities.put(coordinates, entity);
     }
 
@@ -48,21 +56,18 @@ public class WorldMap {
     }
 
     public void removeEntity(Coordinates coordinates) {
-        validateCoordinates(coordinates);
-        entities.remove(coordinates);
-    }
-
-    private void validateCoordinates(Coordinates coordinates) {
-        if (coordinates.row() >= maxRow || coordinates.column() >= maxColumn) {
+        if (!isCoordinateValid(coordinates)) {
             throw new IllegalArgumentException("Coordinates (%d, %d) in WorldMap out of bounds"
                     .formatted(coordinates.row(), coordinates.column()));
         }
-
-        if (coordinates.row() < 0 || coordinates.column() < 0) {
-            throw new IllegalArgumentException("Coordinates (%d, %d) in WorldMap can't be negative"
-                    .formatted(coordinates.row(), coordinates.column()));
-        }
+        entities.remove(coordinates);
     }
+
+    public boolean isCoordinateValid(Coordinates coordinates) {
+        return coordinates.row() >= 0 && coordinates.row() < maxRow
+                && coordinates.column() >= 0 && coordinates.column() < maxColumn;
+    }
+
 
     public boolean isFull() {
         return maxRow * maxColumn <= entities.size();

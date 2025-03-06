@@ -37,7 +37,6 @@ public class Renderer {
     }
 
     public void render() {
-        // TODO: stringbuilder
         for (int row = 0; row < maxRow; row++) {
             StringBuilder line = new StringBuilder();
             line.append(ANSI_GREEN_BACKGROUND);

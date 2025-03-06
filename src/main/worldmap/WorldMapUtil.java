@@ -6,33 +6,34 @@ import main.exception.WorldMapFullException;
 import java.util.List;
 import java.util.Random;
 
-public class WorldMapUtil {
+
+public final class WorldMapUtil {
+
+    private static final List<Coordinates> DIRECTIONS = List.of(
+            new Coordinates(-1, -1),
+            new Coordinates(-1, 0),
+            new Coordinates(-1, 1),
+
+            new Coordinates(0, -1),
+            new Coordinates(0, 1),
+
+            new Coordinates(1, -1),
+            new Coordinates(1, 0),
+            new Coordinates(1, 1)
+    );
 
     private WorldMapUtil() {
     }
 
     public static List<Coordinates> getValidCellsAroundTarget(Coordinates target, WorldMap worldMap) {
-        List<Coordinates> surroundingCells = List.of(
-                new Coordinates(target.row() - 1, target.column() - 1),
-                new Coordinates(target.row() - 1, target.column()),
-                new Coordinates(target.row() - 1, target.column() + 1),
 
-                new Coordinates(target.row(), target.column() - 1),
-                new Coordinates(target.row(), target.column() + 1),
-
-                new Coordinates(target.row() + 1, target.column() - 1),
-                new Coordinates(target.row() + 1, target.column()),
-                new Coordinates(target.row() + 1, target.column() + 1)
-        );
-
-        return surroundingCells.stream()
-                .filter(coordinates -> isCellOnMap(coordinates, worldMap))
+        return DIRECTIONS.stream()
+                .map(direction -> new Coordinates(
+                        target.row() + direction.row(),
+                        target.column() + direction.column()))
+                .filter(worldMap::isCoordinateValid)
                 .toList();
-    }
 
-    private static boolean isCellOnMap(Coordinates coordinates, WorldMap worldMap) {
-        return coordinates.row() >= 0 && coordinates.row() < worldMap.getMaxRow()
-                && coordinates.column() >= 0 && coordinates.column() < worldMap.getMaxColumn();
     }
 
     public static List<Coordinates> getAllCoordinatesWithCreatures(WorldMap worldMap) {

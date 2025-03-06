@@ -1,5 +1,7 @@
 package main.entity.creature;
 
+import main.bfs.AStarPathfinder;
+import main.bfs.Pathfinder;
 import main.entity.Eatable;
 import main.entity.Grass;
 import main.worldmap.Coordinates;
@@ -9,12 +11,16 @@ import java.util.List;
 public class Herbivore extends Creature implements Eatable {
 
     private static final int DEFAULT_MAX_HEALTH = 15;
-    private static final int DEFAULT_SPEED = 5;
+    private static final int DEFAULT_SPEED = 3;
     private static final int HEALTH_RESTORATION_VALUE = 5;
     private static final Class<? extends Eatable> DEFAULT_FOOD = Grass.class;
 
     public Herbivore() {
-        super(DEFAULT_SPEED, DEFAULT_MAX_HEALTH, DEFAULT_FOOD);
+        this(DEFAULT_SPEED, DEFAULT_MAX_HEALTH, DEFAULT_FOOD, new AStarPathfinder());
+    }
+
+    public Herbivore(int speed, int maxHp, Class<? extends Eatable> food, Pathfinder pathfinder) {
+        super(speed, maxHp, food, pathfinder);
     }
 
     @Override

@@ -10,6 +10,14 @@ import java.util.*;
 public class BFSPathfinder implements Pathfinder {
 
     public List<Coordinates> find(WorldMap worldMap, Coordinates start, Class<? extends Eatable> target) {
+        long totalTargets = worldMap.getAllCoordinatesWithEntities().stream()
+                .filter(coordinates -> worldMap.getEntity(coordinates).getClass() == target)
+                .count();
+
+        if (totalTargets == 0) {
+            return Collections.emptyList();
+        }
+
         Set<Coordinates> visited = new HashSet<>();
         Queue<Coordinates> queue = new LinkedList<>();
         queue.add(start);

@@ -1,5 +1,7 @@
 package main.entity.creature;
 
+import main.bfs.BFSPathfinder;
+import main.bfs.Pathfinder;
 import main.entity.Eatable;
 import main.worldmap.Coordinates;
 import main.worldmap.WorldMap;
@@ -8,7 +10,7 @@ import java.util.List;
 
 public class Predator extends Creature {
     private static final int DEFAULT_MAX_HEALTH = 10;
-    private static final int DEFAULT_SPEED = 2;
+    private static final int DEFAULT_SPEED = 4;
     private static final int DEFAULT_ATTACK_POWER = 3;
     private static final Class<? extends Eatable> DEFAULT_FOOD = Herbivore.class;
     private final int attackPower;
@@ -18,7 +20,11 @@ public class Predator extends Creature {
     }
 
     public Predator(int attackPower) {
-        super(DEFAULT_SPEED, DEFAULT_MAX_HEALTH, DEFAULT_FOOD);
+        this(DEFAULT_SPEED, DEFAULT_MAX_HEALTH, DEFAULT_FOOD, new BFSPathfinder(), attackPower);
+    }
+
+    public Predator(int speed, int maxHp, Class<? extends Eatable> food, Pathfinder pathfinder, int attackPower) {
+        super(speed, maxHp, food, pathfinder);
         this.attackPower = attackPower;
     }
 

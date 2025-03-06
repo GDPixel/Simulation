@@ -1,6 +1,5 @@
 package main.entity.creature;
 
-import main.bfs.AStarPathfinder;
 import main.bfs.Pathfinder;
 import main.entity.Eatable;
 import main.entity.Entity;
@@ -18,14 +17,14 @@ public abstract class Creature extends Entity {
     private final int maxHp;
     private int hp;
     private final Class<? extends Eatable> typeOfFood;
-    private final Pathfinder pathfinder = new AStarPathfinder();
+    private final Pathfinder pathfinder;
 
-    public Creature(int speed, int maxHp, Class<? extends Eatable> typeOfFood) {
+    public Creature(int speed, int maxHp, Class<? extends Eatable> typeOfFood, Pathfinder pathfinder) {
         this.speed = speed;
         this.maxHp = maxHp;
         this.hp = maxHp;
-
         this.typeOfFood = typeOfFood;
+        this.pathfinder = pathfinder;
     }
 
     public int getMaxHp() {
