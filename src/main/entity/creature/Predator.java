@@ -39,7 +39,6 @@ public class Predator extends Creature {
             //System.out.println("Predator is moving toward: " + steps.getLast());
             // TODO: possible bug remove creature if it cant move
         }
-            // TODO: if no food on the map move random some steps
     }
 
     private void attack(Coordinates position, List<Coordinates> foodCells, WorldMap worldMap) {

@@ -1,5 +1,6 @@
 package main.worldmap;
 
+import main.entity.Entity;
 import main.entity.creature.Creature;
 import main.exception.WorldMapFullException;
 
@@ -59,5 +60,11 @@ public final class WorldMapUtil {
                 return coordinates;
             }
         }
+    }
+
+    public static void moveEntity(Coordinates from, Coordinates to, WorldMap worldMap) {
+        Entity entity = worldMap.getEntity(from);
+        worldMap.addEntity(to, entity);
+        worldMap.removeEntity(from);
     }
 }

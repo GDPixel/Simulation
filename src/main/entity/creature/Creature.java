@@ -8,6 +8,7 @@ import main.worldmap.WorldMap;
 import main.worldmap.WorldMapUtil;
 
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import static java.lang.Math.min;
@@ -53,15 +54,30 @@ public abstract class Creature extends Entity {
             int possibleSteps = Math.min(speed, path.size() - 2);
             //System.out.println(possibleSteps);
            // System.out.println("Went to: " + path.get(possibleSteps));
-            worldMap.addEntity(path.get(possibleSteps), this);
-            worldMap.removeEntity(path.getFirst());
+            WorldMapUtil.moveEntity(path.getFirst(), path.get(possibleSteps), worldMap);
+        } else {
+            makeRandomMove(position, worldMap);
         }
+    }
+
+    private void makeRandomMove(Coordinates position, WorldMap worldMap) {
+        List<Coordinates> cellsAround = WorldMapUtil.getValidCellsAroundTarget(position, worldMap);
+        List<Coordinates> freeCellsAround = cellsAround.stream()
+                .filter(worldMap::isCellFree)
+                .toList();
+
+        Random random = new Random();
+        Coordinates freeCell = freeCellsAround.get(random.nextInt(freeCellsAround.size()));
+
+        WorldMapUtil.moveEntity(position, freeCell, worldMap);
+
     }
 
     protected List<Coordinates> checkFoodNearBy(Coordinates coordinates, WorldMap worldMap) {
         List<Coordinates> cellsAround = WorldMapUtil.getValidCellsAroundTarget(coordinates, worldMap);
         return cellsAround.stream()
                 .filter(cell -> typeOfFood.isInstance(worldMap.getEntity(cell)))
+                //TODO .toList()
                 .collect(Collectors.toList());
     }
 
@@ -76,10 +92,7 @@ public abstract class Creature extends Entity {
             //System.out.println(this.getClass().getSimpleName() + " hp is " + getHp());
         }
 
-        //TODO: move main.entity from, to
-        worldMap.addEntity(foodCell, this);
-        worldMap.removeEntity(position);
-
+        WorldMapUtil.moveEntity(position, foodCell, worldMap);
         //System.out.println(this.getClass().getSimpleName() + " is eating : " + foodCell);
     }
 }

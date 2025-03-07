@@ -41,7 +41,6 @@ public class Herbivore extends Creature implements Eatable {
             //System.out.println("Predator is moving toward: " + steps.getLast());
             // TODO: possible bug remove creature if it cant move
         }
-        // TODO: if no food on the map move random some steps
     }
 }
 

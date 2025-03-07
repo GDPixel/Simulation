@@ -11,6 +11,7 @@ public class SimulationMenu extends Menu {
         initialize();
     }
 
+
     public void initialize() {
         addItem("Run One Turn", simulation::nextTurn);
         addItem("Start Simulation", simulation::resumeSimulation);

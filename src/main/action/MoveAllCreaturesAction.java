@@ -9,7 +9,6 @@ import java.util.List;
 
 public class MoveAllCreaturesAction extends Action {
 
-    // TODO: may inject moving algorithm BFS or A*
     public MoveAllCreaturesAction() {
     }
 
