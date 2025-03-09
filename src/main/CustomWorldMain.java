@@ -10,7 +10,8 @@ public class CustomWorldMain {
         WorldMap worldMap = new WorldMap(10, 15);
 
         List<Action> initActions = List.of(
-                new CustomPopulateWorldAction());
+                new EqualPopulateWorldAction(100)
+        );
 
         List<main.action.Action> turnActions = List.of(
                 new HungerAction(1, 3),

@@ -66,11 +66,14 @@ public abstract class Creature extends Entity {
                 .filter(worldMap::isCellFree)
                 .toList();
 
+        if (freeCellsAround.isEmpty()) {
+            return;
+        }
+
         Random random = new Random();
         Coordinates freeCell = freeCellsAround.get(random.nextInt(freeCellsAround.size()));
 
         WorldMapUtil.moveEntity(position, freeCell, worldMap);
-
     }
 
     protected List<Coordinates> checkFoodNearBy(Coordinates coordinates, WorldMap worldMap) {

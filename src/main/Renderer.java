@@ -11,39 +11,55 @@ import main.worldmap.Coordinates;
 import main.worldmap.WorldMap;
 
 public class Renderer {
-    public static final String ANSI_GREEN_BACKGROUND = "\u001B[0;42m";
-    public static final String ANSI_RED_BACKGROUND = "\u001B[0;101m";
-    public static final String ANSI_YELLOW_BACKGROUND = "\u001B[0;103m";
-    public static final String ANSI_RESET = "\u001B[0m";
+    private static final String ANSI_GREEN_BACKGROUND = "\u001B[0;42m";
+    private static final String ANSI_RED_BACKGROUND = "\u001B[0;101m";
+    private static final String ANSI_YELLOW_BACKGROUND = "\u001B[0;103m";
+    private static final String ANSI_RESET = "\u001B[0m";
+    private static final String DEFAULT_BACKGROUND_COLOR = ANSI_GREEN_BACKGROUND;
 
-    private static final String FREE_CELL = "⬛";
-    private static final String ROCK = "\uD83D\uDDFB";
-    private static final String TREE = "\uD83C\uDF33";
-    private static final String GRASS = "\uD83C\uDF40";
-    private static final String HERBIVORE = "\uD83D\uDC04";
-    private static final String PREDATOR = "\uD83D\uDC05";
+    private static final String FREE_CELL_SPRITE = "⬛";
+    private static final String ROCK_SPRITE = "\uD83D\uDDFB";
+    private static final String TREE_SPRITE = "\uD83C\uDF33";
+    private static final String GRASS_SPRITE = "\uD83C\uDF40";
+    private static final String HERBIVORE_SPRITE = "\uD83D\uDC04";
+    private static final String PREDATOR_SPRITE = "\uD83D\uDC05";
 
-    private static final double LOW_HP_RATE = 0.3;
-    private static final double MIDDLE_HP_RATE = 0.6;
+    private enum HealthIndicator {
+        LOW_HP(0.3, ANSI_RED_BACKGROUND),
+        MIDDLE_HP(0.6, ANSI_YELLOW_BACKGROUND),
+        FULL_HP(1.0, ANSI_GREEN_BACKGROUND);
+
+        private final double rate;
+        private final String color;
+
+        HealthIndicator(double rate, String color) {
+            this.rate = rate;
+            this.color = color;
+        }
+
+        public double getRate() {
+            return rate;
+        }
+
+        public String getColor() {
+            return color;
+        }
+    }
 
     private final WorldMap worldMap;
-    private final int maxCol;
-    private final int maxRow;
 
     Renderer(WorldMap worldMap) {
         this.worldMap = worldMap;
-        this.maxRow = worldMap.getMaxRow();
-        this.maxCol = worldMap.getMaxColumn();
     }
 
     public void render() {
-        for (int row = 0; row < maxRow; row++) {
+        for (int row = 0; row < worldMap.getMaxRow(); row++) {
             StringBuilder line = new StringBuilder();
-            line.append(ANSI_GREEN_BACKGROUND);
-            for (int col = 0; col < maxCol; col++) {
-                Coordinates coordinates = new Coordinates(row, col);
+            line.append(DEFAULT_BACKGROUND_COLOR);
+            for (int column = 0; column < worldMap.getMaxColumn(); column++) {
+                Coordinates coordinates = new Coordinates(row, column);
                 if (worldMap.isCellFree(coordinates)) {
-                    line.append(FREE_CELL);
+                    line.append(FREE_CELL_SPRITE);
                 } else {
                     Entity entity = worldMap.getEntity(coordinates);
                     String sprite = toSprite(entity);
@@ -58,9 +74,9 @@ public class Renderer {
 
     private String toSprite(Entity entity) {
         return switch (entity) {
-            case Rock rock -> ROCK;
-            case Grass grass -> GRASS;
-            case Tree tree -> TREE;
+            case Rock rock -> ROCK_SPRITE;
+            case Grass grass -> GRASS_SPRITE;
+            case Tree tree -> TREE_SPRITE;
             case Herbivore herbivore -> colorCreatureHP(herbivore);
             case Predator predator -> colorCreatureHP(predator);
             default -> throw new IllegalArgumentException("Unknown main.entity type " + entity);
@@ -70,22 +86,23 @@ public class Renderer {
     // TODO: refactor
     private String colorCreatureHP(Creature creature) {
         return switch (creature) {
-            case Herbivore herbivore -> colorHP(herbivore.getHp(), herbivore.getMaxHp(), HERBIVORE);
-            case Predator predator -> colorHP(predator.getHp(), predator.getMaxHp(), PREDATOR);
+            case Herbivore herbivore -> colorHealthIndicator(herbivore.getHp(), herbivore.getMaxHp(), HERBIVORE_SPRITE);
+            case Predator predator -> colorHealthIndicator(predator.getHp(), predator.getMaxHp(), PREDATOR_SPRITE);
             default -> throw new IllegalArgumentException("Unknown main.entity type " + creature);
         };
     }
 
 
-    private String colorHP(int currentHp, int maxHp, String creatureSprite) {
+    private String colorHealthIndicator(int currentHp, int maxHp, String creatureSprite) {
         double hpLeftRate = (double) currentHp / maxHp;
 
-        if (hpLeftRate < LOW_HP_RATE) {
-            return ANSI_RED_BACKGROUND + creatureSprite + ANSI_GREEN_BACKGROUND;
-        } else if (hpLeftRate < MIDDLE_HP_RATE) {
-            return ANSI_YELLOW_BACKGROUND + creatureSprite + ANSI_GREEN_BACKGROUND;
-        } else {
-            return creatureSprite;
+        if (hpLeftRate < HealthIndicator.LOW_HP.getRate()) {
+            return HealthIndicator.LOW_HP.getColor() + creatureSprite + DEFAULT_BACKGROUND_COLOR;
+        } else if (hpLeftRate < HealthIndicator.MIDDLE_HP.getRate()) {
+            return HealthIndicator.MIDDLE_HP.getColor() + creatureSprite + DEFAULT_BACKGROUND_COLOR;
+        } else if (hpLeftRate <= HealthIndicator.FULL_HP.getRate()) {
+            return HealthIndicator.FULL_HP.getColor() + creatureSprite + DEFAULT_BACKGROUND_COLOR;
         }
+        return creatureSprite;
     }
 }

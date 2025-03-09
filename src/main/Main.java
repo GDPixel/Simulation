@@ -10,7 +10,7 @@ public class Main {
         WorldMap worldMap = new WorldMap(12, 20);
 
         List<Action> initActions = List.of(
-                new PopulateWorldAction(30));
+                new EqualPopulateWorldAction(30));
 
         List<Action> turnActions = List.of(
                 new HungerAction(1, 3),
