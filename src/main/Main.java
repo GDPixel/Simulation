@@ -15,8 +15,6 @@ public class Main {
         WorldMap worldMap = new WorldMap(12, 20);
 
         List<Action> initActions = List.of(
-                new EqualPopulateWorldAction(20),
-
                 new SpawnAction(Rock::new, 10),
                 new SpawnAction(Tree::new, 10),
                 new SpawnAction(Grass::new, 10),

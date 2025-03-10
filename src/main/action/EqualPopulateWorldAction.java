@@ -1,37 +1,31 @@
 package main.action;
 
-import main.EntitySpawner;
 import main.entity.*;
-import main.entity.creature.*;
 import main.worldmap.WorldMap;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 public class EqualPopulateWorldAction extends Action {
-    private final static int TOTAL_ENTITY_TYPES = 5;
+    private final List<Supplier<Entity>> entitySuppliers;
     private final int fillPercentage;
 
-    public EqualPopulateWorldAction(int fillPercentage) {
+    public EqualPopulateWorldAction(int fillPercentage, List<Supplier<Entity>> entitySuppliers) {
         validateFillPercentage(fillPercentage);
         this.fillPercentage = fillPercentage;
+        this.entitySuppliers = entitySuppliers;
     }
 
     @Override
     public void execute(WorldMap worldMap) {
         int totalCoordinates = worldMap.getMaxRow() * worldMap.getMaxColumn();
-        int eachEntityToAdd = (totalCoordinates * fillPercentage / 100) / TOTAL_ENTITY_TYPES;
-        //System.out.println("How many of each main.entity to add: " + eachEntityToAdd);
-        //System.out.println("Total entities to add: " + totalEntitiesToAdd);
+        int totalEntityTypes = entitySuppliers.size();
+        int eachEntityToAdd = (totalCoordinates * fillPercentage / 100) / totalEntityTypes;
 
-        List<EntitySpawner> spawners = List.of(
-                new EntitySpawner(Rock::new, eachEntityToAdd, worldMap),
-                new EntitySpawner(Grass::new, eachEntityToAdd, worldMap),
-                new EntitySpawner(Tree::new, eachEntityToAdd, worldMap),
-                new EntitySpawner(Herbivore::new, eachEntityToAdd, worldMap),
-                new EntitySpawner(Predator::new, eachEntityToAdd, worldMap)
-        );
-
-        spawners.forEach(EntitySpawner::create);
+        for (Supplier<Entity> supplier : entitySuppliers) {
+            SpawnAction spawnAction = new SpawnAction(supplier, eachEntityToAdd);
+            spawnAction.execute(worldMap);
+        }
     }
 
     private void validateFillPercentage(int fillPercentage) {
