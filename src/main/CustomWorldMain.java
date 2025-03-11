@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 
 public class CustomWorldMain {
     public static void main(String[] args) {
-        WorldMap worldMap = new WorldMap(10, 15);
+        WorldMap worldMap = new WorldMap(7, 7);
 
         List<Supplier<Entity>> entitySuppliers = List.of(
                 Rock::new,
@@ -25,7 +25,7 @@ public class CustomWorldMain {
         );
 
         List<Action> initActions = List.of(
-                new EqualPopulateWorldAction(100, entitySuppliers)
+                new EqualPopulateWorldAction(20, entitySuppliers)
         );
 
         List<main.action.Action> turnActions = List.of(

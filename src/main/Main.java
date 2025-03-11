@@ -23,8 +23,8 @@ public class Main {
         );
 
         List<Action> turnActions = List.of(
-                new HungerAction(1, 3),
-                new SpawnAction(Predator::new, 1,6),
+                new HungerAction(1, 4),
+                new SpawnAction(Predator::new, 1,10),
                 new SpawnAction(Herbivore::new, 1,5),
                 new SpawnAction(Grass::new, 5,2),
                 new MoveAllCreaturesAction());

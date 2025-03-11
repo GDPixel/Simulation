@@ -38,7 +38,7 @@ public final class WorldMapUtil {
     }
 
     public static List<Coordinates> getAllCoordinatesWithCreatures(WorldMap worldMap) {
-        List<Coordinates> allEntitiesCoordinates = worldMap.getAllCoordinatesWithEntities();
+        List<Coordinates> allEntitiesCoordinates = worldMap.getAllCellsWithEntities();
         return allEntitiesCoordinates.stream()
                 .filter(c -> worldMap.getEntity(c) instanceof Creature)
                 .toList();
@@ -52,10 +52,9 @@ public final class WorldMapUtil {
         Random rand = new Random();
         while (true) {
             int row = rand.nextInt(worldMap.getMaxRow());
-            int col = rand.nextInt(worldMap.getMaxColumn());
-            // TODO: don't like it every time create new Coordinate
-            // think what to do
-            Coordinates coordinates = new Coordinates(row, col);
+            int column = rand.nextInt(worldMap.getMaxColumn());
+
+            Coordinates coordinates = new Coordinates(row, column);
             if (worldMap.isCellFree(coordinates)) {
                 return coordinates;
             }

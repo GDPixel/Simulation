@@ -1,7 +1,7 @@
 package main.entity.creature;
 
-import main.bfs.AStarPathfinder;
-import main.bfs.Pathfinder;
+import main.pathfinder.AStarPathfinder;
+import main.pathfinder.Pathfinder;
 import main.entity.Eatable;
 import main.entity.Grass;
 import main.worldmap.Coordinates;

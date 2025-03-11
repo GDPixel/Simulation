@@ -40,7 +40,7 @@ public class WorldMap {
         entities.put(coordinates, entity);
     }
 
-    public List<Coordinates> getAllCoordinatesWithEntities() {
+    public List<Coordinates> getAllCellsWithEntities() {
         return new ArrayList<>(entities.keySet());
     }
 
