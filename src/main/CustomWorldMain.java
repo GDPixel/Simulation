@@ -1,35 +1,22 @@
 package main;
 
 import main.action.*;
-import main.entity.Entity;
 import main.entity.Grass;
-import main.entity.Rock;
-import main.entity.Tree;
-import main.entity.creature.Herbivore;
-import main.entity.creature.Predator;
 import main.worldmap.WorldMap;
+import main.worldmap.WorldMapFactory;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class CustomWorldMain {
     public static void main(String[] args) {
-        WorldMap worldMap = new WorldMap(7, 7);
+        WorldMapFactory worldMapFactory = new WorldMapFactory();
+        WorldMap worldMap = worldMapFactory.createCustom10x15();
 
-        List<Supplier<Entity>> entitySuppliers = List.of(
-                Rock::new,
-                Grass::new,
-                Tree::new,
-                Herbivore::new,
-                Predator::new
-        );
-
-        List<Action> initActions = List.of(
-                new EqualPopulateWorldAction(20, entitySuppliers)
-        );
+        List<Action> initActions = Collections.emptyList();
 
         List<main.action.Action> turnActions = List.of(
-                new HungerAction(1, 3),
+                new HungerDamageAction(1, 3),
                 new SpawnAction(Grass::new, 1, 7),
                 new MoveAllCreaturesAction());
 

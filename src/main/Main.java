@@ -15,15 +15,15 @@ public class Main {
         WorldMap worldMap = new WorldMap(12, 20);
 
         List<Action> initActions = List.of(
-                new SpawnAction(Rock::new, 10),
-                new SpawnAction(Tree::new, 10),
+                new SpawnAction(Rock::new, 16),
+                new SpawnAction(Tree::new, 15),
                 new SpawnAction(Grass::new, 10),
-                new SpawnAction(Herbivore::new, 5),
-                new SpawnAction(Predator::new, 4)
+                new SpawnAction(Herbivore::new, 8),
+                new SpawnAction(Predator::new, 6)
         );
 
         List<Action> turnActions = List.of(
-                new HungerAction(1, 4),
+                new HungerDamageAction(1, 4),
                 new SpawnAction(Predator::new, 1,10),
                 new SpawnAction(Herbivore::new, 1,5),
                 new SpawnAction(Grass::new, 5,2),

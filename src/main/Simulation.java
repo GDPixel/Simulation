@@ -10,7 +10,7 @@ import java.util.List;
 public class Simulation {
     private static final int MAX_TURN = 100;
     private static final int INITIAL_TURN = 1;
-    private static final int DELAY = 900;
+    private static final int DELAY = 1500;
     private static final int STOP_INFINITE_SIMULATION = 1;
 
     private final WorldMap worldMap;

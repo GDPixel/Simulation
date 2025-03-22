@@ -7,12 +7,12 @@ import main.worldmap.WorldMapUtil;
 
 import java.util.List;
 
-public class HungerAction extends Action {
+public class HungerDamageAction extends Action {
     private final int frequency;
     private final int hungerDamage;
     private int currentTurn = 1;
 
-    public HungerAction(int hungerDamage, int frequency) {
+    public HungerDamageAction(int hungerDamage, int frequency) {
         if (frequency <= 0) {
             throw new IllegalArgumentException("frequency must be greater than 0");
         }
