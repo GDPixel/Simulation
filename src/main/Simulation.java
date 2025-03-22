@@ -2,8 +2,9 @@ package main;
 
 import main.action.*;
 import main.menu.IntegerSelectDialog;
-import main.menu.SimulationMenu;
+import main.menu.MenuFactory;
 import main.worldmap.WorldMap;
+import main.menu.Menu;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class Simulation {
     private final List<Action> turnActions;
     private int currentTurn = INITIAL_TURN;
     private boolean isPaused;
-    private final SimulationMenu simulationMenu;
+    private final Menu simulationMenu;
     private final Object lock = new Object();
     private boolean isRunning;
 
@@ -28,9 +29,9 @@ public class Simulation {
         this.initActions = initActions;
         this.turnActions = turnActions;
         worldMapRenderer = new Renderer(worldMap);
-        simulationMenu = new SimulationMenu("Simulation menu", "Choose command:", "wrong input", this);
+        simulationMenu = MenuFactory.createSimulationMenu(this);
         isRunning = true;
-        isPaused = false;
+        isPaused = true;
         initSimulation();
     }
 
@@ -52,17 +53,20 @@ public class Simulation {
         while (isRunning) {
             displayAndProcessMenu();
         }
+        thread.interrupt();
     }
 
     private Thread createSimulationThread() {
         Thread thread = new Thread(() -> {
             while (isRunning) {
                 synchronized (lock) {
-                    while (!isPaused) {
+                    while (isPaused) {
                         try {
                             lock.wait();
                         } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
+                            if (!isRunning) {
+                                return; // Exit the thread
+                            }
                         }
                     }
                 }
@@ -80,18 +84,17 @@ public class Simulation {
     }
 
     public void pauseSimulation() {
-        isPaused = false;
+        isPaused = true;
     }
 
     public void resumeSimulation() {
-        isPaused = true;
+        isPaused = false;
         synchronized (lock) {
             lock.notify();
         }
     }
 
     public void exitSimulation() {
-        // TODO: fix exiting
         isRunning = false;
     }
 
@@ -102,7 +105,7 @@ public class Simulation {
     }
 
     private void displayAndProcessMenu() {
-        if (!isPaused) {
+        if (isPaused) {
             simulationMenu.show();
             simulationMenu.select();
         } else {
