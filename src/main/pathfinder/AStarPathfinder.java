@@ -65,7 +65,7 @@ public class AStarPathfinder extends AbstractPathfinder {
     }
 
     private int heuristic(Coordinates a, Class<? extends Eatable> target, WorldMap worldMap) {
-        Coordinates targetCoordinates = findTargetCoordinates(a, target, worldMap);
+        Coordinates targetCoordinates = findClosestTargetCoordinates(a, target, worldMap);
 
         return chebyshevDistance(a, targetCoordinates);
     }
@@ -75,8 +75,7 @@ public class AStarPathfinder extends AbstractPathfinder {
         return Math.max(Math.abs(a.row() - b.row()), Math.abs(a.column() - b.column()));
     }
 
-
-    private Coordinates findTargetCoordinates(Coordinates start, Class<? extends Eatable> target, WorldMap worldMap) {
+    private Coordinates findClosestTargetCoordinates(Coordinates start, Class<? extends Eatable> target, WorldMap worldMap) {
 
         Coordinates closestTarget = null;
         int minDistance = Integer.MAX_VALUE;
@@ -90,20 +89,16 @@ public class AStarPathfinder extends AbstractPathfinder {
                 }
             }
         }
-
         return closestTarget;
     }
 
-
     private List<Coordinates> reconstructPath(Node currentNode) {
-
         List<Coordinates> path = new ArrayList<>();
         while (currentNode != null) {
             path.add(currentNode.coordinates);
             currentNode = currentNode.parent;
         }
         Collections.reverse(path);
-
         return path;
     }
 

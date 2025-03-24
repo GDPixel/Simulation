@@ -31,7 +31,6 @@ public class WorldMap {
 
     public Entity getEntity(Coordinates coordinates) {
         validateCoordinates(coordinates);
-
         return entities.get(coordinates);
     }
 

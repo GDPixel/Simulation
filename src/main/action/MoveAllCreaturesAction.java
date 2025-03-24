@@ -9,9 +9,6 @@ import java.util.List;
 
 public class MoveAllCreaturesAction extends Action {
 
-    public MoveAllCreaturesAction() {
-    }
-
     @Override
     public void execute(WorldMap worldMap) {
         //TODO: possible bug if remove creature before it moved

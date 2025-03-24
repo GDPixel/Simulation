@@ -24,6 +24,10 @@ public class ConsoleRenderer implements Renderer {
     private static final String HERBIVORE_SPRITE = "\uD83D\uDC04";
     private static final String PREDATOR_SPRITE = "\uD83D\uDC05";
 
+    private static final boolean DEFAULT_SHOW_HEALTH_INDICATOR = true;
+
+    private final boolean showHealthIndicator;
+
     private enum HealthIndicator {
         LOW_HP(0.3, ANSI_RED_BACKGROUND),
         MIDDLE_HP(0.6, ANSI_YELLOW_BACKGROUND),
@@ -46,14 +50,18 @@ public class ConsoleRenderer implements Renderer {
         }
     }
 
-    private final WorldMap worldMap;
-
-    public ConsoleRenderer(WorldMap worldMap) {
-        this.worldMap = worldMap;
+    public ConsoleRenderer() {
+        this(DEFAULT_SHOW_HEALTH_INDICATOR);
     }
 
+    public ConsoleRenderer(boolean showHealthIndicator) {
+        this.showHealthIndicator = showHealthIndicator;
+    }
+
+
+
     @Override
-    public void render() {
+    public void render(WorldMap worldMap) {
         for (int row = 0; row < worldMap.getMaxRow(); row++) {
             StringBuilder line = new StringBuilder();
             line.append(DEFAULT_BACKGROUND_COLOR);
@@ -72,13 +80,12 @@ public class ConsoleRenderer implements Renderer {
         }
     }
 
-
     private String toSprite(Entity entity) {
         return switch (entity) {
             case Rock rock -> ROCK_SPRITE;
             case Grass grass -> GRASS_SPRITE;
             case Tree tree -> TREE_SPRITE;
-            case Creature creature -> colorCreatureHP(creature);
+            case Creature creature -> showHealthIndicator ? colorCreatureHP(creature) : getSpriteForCreature(creature);
             default -> throw new IllegalArgumentException("Unknown Entity type " + entity);
         };
     }
@@ -108,5 +115,4 @@ public class ConsoleRenderer implements Renderer {
             default -> throw new IllegalArgumentException("Unknown Creature type " + creature);
         };
     }
-
 }

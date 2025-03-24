@@ -6,6 +6,5 @@ public record Coordinates(int row, int column) {
     public String toString() {
         return "(" + row + ", " + column + ')';
     }
-
 }
 

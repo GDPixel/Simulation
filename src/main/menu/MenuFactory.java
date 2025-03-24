@@ -1,6 +1,6 @@
 package main.menu;
 
-import main.Simulation;
+import main.simulation.Simulation;
 
 public class MenuFactory {
     public static Menu createSimulationMenu(Simulation simulation) {
@@ -9,7 +9,6 @@ public class MenuFactory {
         menu.addItem("Run One Turn", simulation::nextTurn);
         menu.addItem("Start Infinite Simulation", simulation::resumeSimulation);
         menu.addItem("Exit", simulation::exitSimulation);
-
         return menu;
     }
 }

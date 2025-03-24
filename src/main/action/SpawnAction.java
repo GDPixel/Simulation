@@ -1,7 +1,6 @@
 package main.action;
 
 import main.entity.Entity;
-import main.exception.WorldMapFullException;
 import main.worldmap.Coordinates;
 import main.worldmap.WorldMap;
 import main.worldmap.WorldMapUtil;

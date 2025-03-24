@@ -7,9 +7,9 @@ import main.entity.Grass;
 import main.worldmap.Coordinates;
 import main.worldmap.WorldMap;
 import java.util.List;
+import java.util.Random;
 
 public class Herbivore extends Creature implements Eatable {
-
     private static final int DEFAULT_MAX_HEALTH = 15;
     private static final int DEFAULT_SPEED = 3;
     private static final int HEALTH_RESTORATION_VALUE = 5;
@@ -31,15 +31,12 @@ public class Herbivore extends Creature implements Eatable {
     @Override
     public void makeMove(Coordinates position, WorldMap worldMap) {
         List<Coordinates> foodCells = checkFoodNearBy(position, worldMap);
-        //System.out.println("Herbivore's Food: " + foodCells);
         if (!foodCells.isEmpty()) {
-            //TODO: choose random food if more than one nearby
-            Coordinates foodCell = foodCells.getFirst();
+            Random random = new Random();
+            Coordinates foodCell = foodCells.get(random.nextInt(foodCells.size()));
             eat(position, foodCell, worldMap);
         } else {
             super.makeMove(position, worldMap);
-            //System.out.println("Predator is moving toward: " + steps.getLast());
-            // TODO: possible bug remove creature if it cant move
         }
     }
 }

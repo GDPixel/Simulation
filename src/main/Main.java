@@ -6,6 +6,9 @@ import main.entity.Rock;
 import main.entity.Tree;
 import main.entity.creature.Herbivore;
 import main.entity.creature.Predator;
+import main.renderer.ConsoleRenderer;
+import main.renderer.Renderer;
+import main.simulation.Simulation;
 import main.worldmap.WorldMap;
 
 import java.util.List;
@@ -13,6 +16,7 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         WorldMap worldMap = new WorldMap(12, 20);
+        Renderer consoleRenderer = new ConsoleRenderer();
 
         List<Action> initActions = List.of(
                 new SpawnAction(Rock::new, 16),
@@ -29,7 +33,7 @@ public class Main {
                 new SpawnAction(Grass::new, 5,2),
                 new MoveAllCreaturesAction());
 
-        Simulation simulation = new Simulation(worldMap, initActions, turnActions);
+        Simulation simulation = new Simulation(worldMap, consoleRenderer, initActions, turnActions);
         simulation.startSimulation();
     }
 }

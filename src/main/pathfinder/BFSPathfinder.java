@@ -8,7 +8,6 @@ import main.worldmap.WorldMapUtil;
 import java.util.*;
 
 public class BFSPathfinder extends AbstractPathfinder {
-
     public List<Coordinates> find(Coordinates start, Class<? extends Eatable> target, WorldMap worldMap) {
 
         if (countTargets(target, worldMap) == 0) {
@@ -37,7 +36,6 @@ public class BFSPathfinder extends AbstractPathfinder {
                 }
             }
         }
-
         return Collections.emptyList();
     }
 

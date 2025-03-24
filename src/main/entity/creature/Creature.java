@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import static java.lang.Math.min;
 
 public abstract class Creature extends Entity {
+    private static final int WITHOUT_POSITION_AND_TARGET = 2;
     private final int speed;
     private final int maxHp;
     private int hp;
@@ -47,13 +48,7 @@ public abstract class Creature extends Entity {
     public void makeMove(Coordinates position, WorldMap worldMap) {
         List<Coordinates> path = pathfinder.find(position, typeOfFood, worldMap);
         if (!path.isEmpty()) {
-           // System.out.println(this.getClass().getSimpleName() + " is moving toward: " + path.getLast());
-            // TODO: think of moving toward food if food last step stay close to it (step.size() - 2)
-            // TODO: if not, go further (step.size() - 1)
-            //System.out.println(path.size() + " : " + path);
-            int possibleSteps = Math.min(speed, path.size() - 2);
-            //System.out.println(possibleSteps);
-           // System.out.println("Went to: " + path.get(possibleSteps));
+            int possibleSteps = Math.min(speed, path.size() - WITHOUT_POSITION_AND_TARGET);
             WorldMapUtil.moveEntity(path.getFirst(), path.get(possibleSteps), worldMap);
         } else {
             makeRandomMove(position, worldMap);
@@ -80,23 +75,16 @@ public abstract class Creature extends Entity {
         List<Coordinates> cellsAround = WorldMapUtil.getValidCellsAroundTarget(coordinates, worldMap);
         return cellsAround.stream()
                 .filter(cell -> typeOfFood.isInstance(worldMap.getEntity(cell)))
-                //TODO .toList()
-                .collect(Collectors.toList());
+                .toList();
     }
 
     protected void eat(Coordinates position, Coordinates foodCell, WorldMap worldMap) {
-        //TODO: check if more than one food near
-        //super.makeMove(List.of(position, foodCells.getFirst()), worldMap);
-
         Entity entity = worldMap.getEntity(foodCell);
         if (entity instanceof Eatable food) {
-            //System.out.println(this.getClass().getSimpleName() + " hp before eating is " + getHp());
             setHp(min(getHp() + food.getHealthRestorationValue(), maxHp));
-            //System.out.println(this.getClass().getSimpleName() + " hp is " + getHp());
         }
 
         WorldMapUtil.moveEntity(position, foodCell, worldMap);
-        //System.out.println(this.getClass().getSimpleName() + " is eating : " + foodCell);
     }
 }
 

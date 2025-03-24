@@ -9,7 +9,6 @@ import java.util.Random;
 
 
 public final class WorldMapUtil {
-
     private static final List<Coordinates> DIRECTIONS = List.of(
             new Coordinates(-1, -1),
             new Coordinates(-1, 0),
@@ -27,7 +26,6 @@ public final class WorldMapUtil {
     }
 
     public static List<Coordinates> getValidCellsAroundTarget(Coordinates target, WorldMap worldMap) {
-
         return DIRECTIONS.stream()
                 .map(direction -> new Coordinates(
                         target.row() + direction.row(),
@@ -49,11 +47,11 @@ public final class WorldMapUtil {
         if (worldMap.isFull()) {
             throw new WorldMapFullException("WorldMap is full, can't get free cell");
         }
+
         Random rand = new Random();
         while (true) {
             int row = rand.nextInt(worldMap.getMaxRow());
             int column = rand.nextInt(worldMap.getMaxColumn());
-
             Coordinates coordinates = new Coordinates(row, column);
             if (worldMap.isCellFree(coordinates)) {
                 return coordinates;

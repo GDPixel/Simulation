@@ -7,6 +7,7 @@ import main.entity.creature.Herbivore;
 import main.entity.creature.Predator;
 
 public class WorldMapFactory {
+
     public WorldMap createCustom10x15() {
         WorldMap worldMap = new WorldMap(10, 15);
 
@@ -23,7 +24,6 @@ public class WorldMapFactory {
         worldMap.addEntity(new Coordinates(7, 5), new Herbivore());
         worldMap.addEntity(new Coordinates(7, 10), new Tree());
         worldMap.addEntity(new Coordinates(9, 14), new Predator());
-
         return worldMap;
     }
 
@@ -44,7 +44,6 @@ public class WorldMapFactory {
         worldMap.addEntity(new Coordinates(6, 1), new Tree());
         worldMap.addEntity(new Coordinates(6, 2), new Grass());
         worldMap.addEntity(new Coordinates(6, 6), new Predator());
-
         return worldMap;
     }
 
@@ -61,7 +60,6 @@ public class WorldMapFactory {
         worldMap.addEntity(new Coordinates(3, 2), new Herbivore());
         worldMap.addEntity(new Coordinates(4, 0), new Grass());
         worldMap.addEntity(new Coordinates(4, 4), new Grass());
-
         return worldMap;
     }
 }

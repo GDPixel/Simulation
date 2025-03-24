@@ -1,9 +1,8 @@
-package main;
+package main.simulation;
 
 import main.action.*;
 import main.menu.IntegerSelectDialog;
 import main.menu.MenuFactory;
-import main.renderer.ConsoleRenderer;
 import main.renderer.Renderer;
 import main.worldmap.WorldMap;
 import main.menu.Menu;
@@ -25,11 +24,11 @@ public class Simulation {
     private final Object lock = new Object();
     private boolean isRunning;
 
-    public Simulation(WorldMap worldMap, List<Action> initActions, List<Action> turnActions) {
+    public Simulation(WorldMap worldMap, Renderer renderer, List<Action> initActions, List<Action> turnActions) {
         this.worldMap = worldMap;
         this.initActions = initActions;
         this.turnActions = turnActions;
-        renderer = new ConsoleRenderer(worldMap);
+        this.renderer = renderer;
         simulationMenu = MenuFactory.createSimulationMenu(this);
         isRunning = true;
         isPaused = true;
@@ -42,13 +41,13 @@ public class Simulation {
         }
 
         System.out.println("Turn: " + currentTurn);
-        renderer.render();
+        renderer.render(worldMap);
         currentTurn++;
     }
 
     public void startSimulation() {
         System.out.println("WorldMap initial position");
-        renderer.render();
+        renderer.render(worldMap);
         Thread thread = createSimulationThread();
         thread.start();
         while (isRunning) {
@@ -58,7 +57,7 @@ public class Simulation {
     }
 
     private Thread createSimulationThread() {
-        Thread thread = new Thread(() -> {
+        return new Thread(() -> {
             while (isRunning) {
                 synchronized (lock) {
                     while (isPaused) {
@@ -66,7 +65,7 @@ public class Simulation {
                             lock.wait();
                         } catch (InterruptedException e) {
                             if (!isRunning) {
-                                return; // Exit the thread
+                                return;
                             }
                         }
                     }
@@ -80,8 +79,6 @@ public class Simulation {
                 }
             }
         });
-
-        return thread;
     }
 
     public void pauseSimulation() {

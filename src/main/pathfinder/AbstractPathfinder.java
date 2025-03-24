@@ -15,10 +15,11 @@ public abstract class AbstractPathfinder implements Pathfinder {
     }
 
     protected boolean isTargetFound(Coordinates coordinates, Class<? extends Eatable> target, WorldMap worldMap) {
-        return !worldMap.isCellFree(coordinates) && worldMap.getEntity(coordinates).getClass() == target;
+        return !worldMap.isCellFree(coordinates) && (worldMap.getEntity(coordinates).getClass() == target);
     }
 
     protected boolean isValidMove(Set<Coordinates> visited, Coordinates cell, Class<? extends Eatable> target, WorldMap worldMap) {
-        return !visited.contains(cell) && (worldMap.isCellFree(cell) || isTargetFound(cell, target, worldMap));
+        return !visited.contains(cell) &&
+                (worldMap.isCellFree(cell) || isTargetFound(cell, target, worldMap));
     }
 }

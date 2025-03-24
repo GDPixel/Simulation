@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class IntegerSelectDialog implements Dialog<Integer> {
-
     private final String title;
     private final String error;
     private final List<Integer> values;
