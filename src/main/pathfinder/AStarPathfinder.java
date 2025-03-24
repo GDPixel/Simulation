@@ -103,7 +103,7 @@ public class AStarPathfinder extends AbstractPathfinder {
             currentNode = currentNode.parent;
         }
         Collections.reverse(path);
-        System.out.println(path);
+
         return path;
     }
 

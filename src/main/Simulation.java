@@ -3,19 +3,20 @@ package main;
 import main.action.*;
 import main.menu.IntegerSelectDialog;
 import main.menu.MenuFactory;
+import main.renderer.ConsoleRenderer;
+import main.renderer.Renderer;
 import main.worldmap.WorldMap;
 import main.menu.Menu;
 
 import java.util.List;
 
 public class Simulation {
-    private static final int MAX_TURN = 100;
     private static final int INITIAL_TURN = 1;
     private static final int DELAY = 1500;
     private static final int STOP_INFINITE_SIMULATION = 1;
 
     private final WorldMap worldMap;
-    private final Renderer worldMapRenderer;
+    private final Renderer renderer;
     private final List<Action> initActions;
     private final List<Action> turnActions;
     private int currentTurn = INITIAL_TURN;
@@ -28,7 +29,7 @@ public class Simulation {
         this.worldMap = worldMap;
         this.initActions = initActions;
         this.turnActions = turnActions;
-        worldMapRenderer = new Renderer(worldMap);
+        renderer = new ConsoleRenderer(worldMap);
         simulationMenu = MenuFactory.createSimulationMenu(this);
         isRunning = true;
         isPaused = true;
@@ -41,13 +42,13 @@ public class Simulation {
         }
 
         System.out.println("Turn: " + currentTurn);
-        worldMapRenderer.render();
+        renderer.render();
         currentTurn++;
     }
 
     public void startSimulation() {
         System.out.println("WorldMap initial position");
-        worldMapRenderer.render();
+        renderer.render();
         Thread thread = createSimulationThread();
         thread.start();
         while (isRunning) {

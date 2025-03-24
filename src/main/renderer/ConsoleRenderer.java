@@ -1,4 +1,4 @@
-package main;
+package main.renderer;
 
 import main.entity.Entity;
 import main.entity.Grass;
@@ -10,7 +10,7 @@ import main.entity.creature.Predator;
 import main.worldmap.Coordinates;
 import main.worldmap.WorldMap;
 
-public class Renderer {
+public class ConsoleRenderer implements Renderer {
     private static final String ANSI_GREEN_BACKGROUND = "\u001B[0;42m";
     private static final String ANSI_RED_BACKGROUND = "\u001B[0;101m";
     private static final String ANSI_YELLOW_BACKGROUND = "\u001B[0;103m";
@@ -48,10 +48,11 @@ public class Renderer {
 
     private final WorldMap worldMap;
 
-    Renderer(WorldMap worldMap) {
+    public ConsoleRenderer(WorldMap worldMap) {
         this.worldMap = worldMap;
     }
 
+    @Override
     public void render() {
         for (int row = 0; row < worldMap.getMaxRow(); row++) {
             StringBuilder line = new StringBuilder();
@@ -77,32 +78,35 @@ public class Renderer {
             case Rock rock -> ROCK_SPRITE;
             case Grass grass -> GRASS_SPRITE;
             case Tree tree -> TREE_SPRITE;
-            case Herbivore herbivore -> colorCreatureHP(herbivore);
-            case Predator predator -> colorCreatureHP(predator);
-            default -> throw new IllegalArgumentException("Unknown main.entity type " + entity);
+            case Creature creature -> colorCreatureHP(creature);
+            default -> throw new IllegalArgumentException("Unknown Entity type " + entity);
         };
     }
 
-    // TODO: refactor
     private String colorCreatureHP(Creature creature) {
-        return switch (creature) {
-            case Herbivore herbivore -> colorHealthIndicator(herbivore.getHp(), herbivore.getMaxHp(), HERBIVORE_SPRITE);
-            case Predator predator -> colorHealthIndicator(predator.getHp(), predator.getMaxHp(), PREDATOR_SPRITE);
-            default -> throw new IllegalArgumentException("Unknown main.entity type " + creature);
-        };
-    }
+        double hpLeftRate = getHpLeftRate(creature);
 
-
-    private String colorHealthIndicator(int currentHp, int maxHp, String creatureSprite) {
-        double hpLeftRate = (double) currentHp / maxHp;
-
-        if (hpLeftRate < HealthIndicator.LOW_HP.getRate()) {
-            return HealthIndicator.LOW_HP.getColor() + creatureSprite + DEFAULT_BACKGROUND_COLOR;
-        } else if (hpLeftRate < HealthIndicator.MIDDLE_HP.getRate()) {
-            return HealthIndicator.MIDDLE_HP.getColor() + creatureSprite + DEFAULT_BACKGROUND_COLOR;
-        } else if (hpLeftRate <= HealthIndicator.FULL_HP.getRate()) {
-            return HealthIndicator.FULL_HP.getColor() + creatureSprite + DEFAULT_BACKGROUND_COLOR;
+        String creatureSprite = getSpriteForCreature(creature);
+        for (HealthIndicator indicator : HealthIndicator.values()) {
+            if (hpLeftRate < indicator.getRate()) {
+                return indicator.getColor() + creatureSprite + DEFAULT_BACKGROUND_COLOR;
+            }
         }
         return creatureSprite;
     }
+
+    private double getHpLeftRate(Creature creature) {
+        int currentHp = creature.getHp();
+        int maxHp = creature.getMaxHp();
+        return (double) currentHp / maxHp;
+    }
+
+    private String getSpriteForCreature(Creature creature) {
+        return switch (creature) {
+            case Herbivore herbivore -> HERBIVORE_SPRITE;
+            case Predator predator -> PREDATOR_SPRITE;
+            default -> throw new IllegalArgumentException("Unknown Creature type " + creature);
+        };
+    }
+
 }
