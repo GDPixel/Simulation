@@ -16,9 +16,11 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class EqualPopulateWorldMain {
+    public static final boolean DONT_SHOW_HP = false;
+
     public static void main(String[] args) {
         WorldMap worldMap = new WorldMap(12,20);
-        Renderer consoleRenderer = new ConsoleRenderer();
+        Renderer consoleRenderer = new ConsoleRenderer(DONT_SHOW_HP);
 
         List<Supplier<Entity>> entitySuppliers = List.of(
                 Rock::new,
@@ -29,7 +31,7 @@ public class EqualPopulateWorldMain {
         );
 
         List<Action> initActions = List.of(
-                new EqualPopulateWorldAction(30, entitySuppliers)
+                new EqualPopulateWorldAction(40, entitySuppliers)
         );
 
         List<main.action.Action> turnActions = List.of(

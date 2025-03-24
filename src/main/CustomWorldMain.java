@@ -2,6 +2,7 @@ package main;
 
 import main.action.*;
 import main.entity.Grass;
+import main.renderer.AnsiColors;
 import main.renderer.ConsoleRenderer;
 import main.renderer.Renderer;
 import main.simulation.Simulation;
@@ -15,7 +16,7 @@ public class CustomWorldMain {
     public static void main(String[] args) {
         WorldMapFactory worldMapFactory = new WorldMapFactory();
         WorldMap worldMap = worldMapFactory.createCustom7x7();
-        Renderer consoleRenderer = new ConsoleRenderer();
+        Renderer consoleRenderer = new ConsoleRenderer(AnsiColors.BACKGROUND_BLUE);
 
         List<Action> initActions = Collections.emptyList();
 

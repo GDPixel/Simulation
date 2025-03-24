@@ -11,11 +11,7 @@ import main.worldmap.Coordinates;
 import main.worldmap.WorldMap;
 
 public class ConsoleRenderer implements Renderer {
-    private static final String ANSI_GREEN_BACKGROUND = "\u001B[0;42m";
-    private static final String ANSI_RED_BACKGROUND = "\u001B[0;101m";
-    private static final String ANSI_YELLOW_BACKGROUND = "\u001B[0;103m";
-    private static final String ANSI_RESET = "\u001B[0m";
-    private static final String DEFAULT_BACKGROUND_COLOR = ANSI_GREEN_BACKGROUND;
+    private static final String DEFAULT_BACKGROUND_COLOR = AnsiColors.BACKGROUND_GREEN;
 
     private static final String FREE_CELL_SPRITE = "⬛";
     private static final String ROCK_SPRITE = "\uD83D\uDDFB";
@@ -24,14 +20,16 @@ public class ConsoleRenderer implements Renderer {
     private static final String HERBIVORE_SPRITE = "\uD83D\uDC04";
     private static final String PREDATOR_SPRITE = "\uD83D\uDC05";
 
+    private static final double DOUBLE_PRECISION_EPSILON = 0.00001;
     private static final boolean DEFAULT_SHOW_HEALTH_INDICATOR = true;
 
     private final boolean showHealthIndicator;
+    private final String backgroundColor;
 
     private enum HealthIndicator {
-        LOW_HP(0.3, ANSI_RED_BACKGROUND),
-        MIDDLE_HP(0.6, ANSI_YELLOW_BACKGROUND),
-        FULL_HP(1.0, ANSI_GREEN_BACKGROUND);
+        LOW_HP(0.3, AnsiColors.BACKGROUND_RED),
+        MIDDLE_HP(0.6, AnsiColors.BACKGROUND_YELLOW),
+        FULL_HP(1.0, AnsiColors.BACKGROUND_GREEN);
 
         private final double rate;
         private final String color;
@@ -51,20 +49,27 @@ public class ConsoleRenderer implements Renderer {
     }
 
     public ConsoleRenderer() {
-        this(DEFAULT_SHOW_HEALTH_INDICATOR);
+        this(DEFAULT_BACKGROUND_COLOR, DEFAULT_SHOW_HEALTH_INDICATOR);
+    }
+
+    public ConsoleRenderer(String backgroundColor) {
+        this(backgroundColor, DEFAULT_SHOW_HEALTH_INDICATOR);
     }
 
     public ConsoleRenderer(boolean showHealthIndicator) {
-        this.showHealthIndicator = showHealthIndicator;
+        this(DEFAULT_BACKGROUND_COLOR, showHealthIndicator);
     }
 
-
+    public ConsoleRenderer(String backgroundColor, boolean showHealthIndicator) {
+        this.backgroundColor = backgroundColor;
+        this.showHealthIndicator = showHealthIndicator;
+    }
 
     @Override
     public void render(WorldMap worldMap) {
         for (int row = 0; row < worldMap.getMaxRow(); row++) {
             StringBuilder line = new StringBuilder();
-            line.append(DEFAULT_BACKGROUND_COLOR);
+            line.append(backgroundColor);
             for (int column = 0; column < worldMap.getMaxColumn(); column++) {
                 Coordinates coordinates = new Coordinates(row, column);
                 if (worldMap.isCellFree(coordinates)) {
@@ -75,7 +80,7 @@ public class ConsoleRenderer implements Renderer {
                     line.append(sprite);
                 }
             }
-            line.append(ANSI_RESET);
+            line.append(AnsiColors.RESET);
             System.out.println(line);
         }
     }
@@ -95,8 +100,8 @@ public class ConsoleRenderer implements Renderer {
 
         String creatureSprite = getSpriteForCreature(creature);
         for (HealthIndicator indicator : HealthIndicator.values()) {
-            if (hpLeftRate < indicator.getRate()) {
-                return indicator.getColor() + creatureSprite + DEFAULT_BACKGROUND_COLOR;
+            if (hpLeftRate < (indicator.getRate() + DOUBLE_PRECISION_EPSILON)) {
+                return indicator.getColor() + creatureSprite + backgroundColor;
             }
         }
         return creatureSprite;

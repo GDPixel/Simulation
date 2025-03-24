@@ -13,6 +13,8 @@ public class Simulation {
     private static final int INITIAL_TURN = 1;
     private static final int DELAY = 1500;
     private static final int STOP_INFINITE_SIMULATION = 1;
+    private static final String WRONG_INPUT_INFINITE_SIMULATION = "Wrong input, enter %d to stop simulation".formatted(STOP_INFINITE_SIMULATION);
+    private static final String INFINITE_SIMULATION_MESSAGE = "Infinite simulation, enter %d to stop%n";
 
     private final WorldMap worldMap;
     private final Renderer renderer;
@@ -71,7 +73,7 @@ public class Simulation {
                     }
                 }
                 nextTurn();
-                System.out.printf("Infinite simulation, enter %d to stop%n", STOP_INFINITE_SIMULATION);
+                System.out.printf(INFINITE_SIMULATION_MESSAGE, STOP_INFINITE_SIMULATION);
                 try {
                     Thread.sleep(DELAY);
                 } catch (InterruptedException e) {
@@ -108,7 +110,7 @@ public class Simulation {
             simulationMenu.select();
         } else {
             IntegerSelectDialog dialog = new IntegerSelectDialog("",
-                    "Wrong input, enter %d to stop simulation".formatted(STOP_INFINITE_SIMULATION),
+                    WRONG_INPUT_INFINITE_SIMULATION,
                     List.of(STOP_INFINITE_SIMULATION));
             if (dialog.input() == STOP_INFINITE_SIMULATION) {
                 pauseSimulation();
