@@ -9,65 +9,62 @@ import java.util.*;
 
 public class AStarPathfinder extends AbstractPathfinder {
 
+    private static final int START_G_COST = 0;
+    private static final int NEIGHBOR_G_COST = 1;
 
     @Override
     public List<Coordinates> find(Coordinates start, Class<? extends Eatable> target, WorldMap worldMap) {
 
-        if (targetCount(worldMap, target) == 0) {
+        if (countTargets(target, worldMap) == 0) {
             return Collections.emptyList();
         }
 
+        PriorityQueue<Node> openNodes = new PriorityQueue<>(Comparator.comparingInt(node -> node.fScore));
+        Set<Coordinates> visited = new HashSet<>();
 
-        // Priority queue for the open set
-        PriorityQueue<Node> openSet = new PriorityQueue<>(Comparator.comparingInt(node -> node.f));
-        Set<Coordinates> closedSet = new HashSet<>();
+        Node startNode = new Node(start, START_G_COST, heuristic(start, target, worldMap));
+        openNodes.add(startNode);
 
-        // Initialize the start node
-        Node startNode = new Node(start, 0, heuristic(start, target, worldMap));
-        openSet.add(startNode);
+        while (!openNodes.isEmpty()) {
+            Node currentNode = openNodes.poll();
 
-        Map<Coordinates, Node> allNodes = new HashMap<>();
-        allNodes.put(start, startNode);
-
-        while (!openSet.isEmpty()) {
-            Node currentNode = openSet.poll();
-
-            if (isTargetEntity(currentNode.coordinates, target, worldMap)) {
+            if (isTargetFound(currentNode.coordinates, target, worldMap)) {
                 return reconstructPath(currentNode);
             }
 
-            closedSet.add(currentNode.coordinates);
-
-
-            List<Coordinates> neighbors = WorldMapUtil.getValidCellsAroundTarget(currentNode.coordinates, worldMap);
-            for (Coordinates neighbor : neighbors) {
-                if (!isValidMove(closedSet, neighbor, target, worldMap)) {
-                    continue;
-                }
-
-                int tentativeGScore = currentNode.g + 1; // Assuming uniform cost for simplicity
-
-                Node neighborNode = allNodes.getOrDefault(neighbor, new Node(neighbor, Integer.MAX_VALUE, Integer.MAX_VALUE));
-
-                if (tentativeGScore < neighborNode.g) {
-                    // This path to neighbor is better than any previous one
-                    neighborNode.g = tentativeGScore;
-                    neighborNode.f = tentativeGScore + heuristic(neighbor, target, worldMap);
-                    neighborNode.parent = currentNode;
-
-                    if (!openSet.contains(neighborNode)) {
-                        openSet.add(neighborNode);
-                        allNodes.put(neighbor, neighborNode);
-                    }
-                }
-            }
+            visited.add(currentNode.coordinates);
+            processNeighborNodes(target, currentNode, visited, openNodes, worldMap);
         }
 
         return Collections.emptyList();
     }
 
+    private void processNeighborNodes(Class<? extends Eatable> target,
+                                      Node currentNode,
+                                      Set<Coordinates> visited,
+                                      PriorityQueue<Node> openNodes,
+                                      WorldMap worldMap) {
+
+        List<Coordinates> neighborCells = WorldMapUtil.getValidCellsAroundTarget(currentNode.coordinates, worldMap);
+        for (Coordinates neighborCell : neighborCells) {
+            if (!isValidMove(visited, neighborCell, target, worldMap)) {
+                continue;
+            }
+
+            int tentativeGScore = currentNode.gScore + NEIGHBOR_G_COST;
+
+            Node neighborNode = new Node(neighborCell, Integer.MAX_VALUE, Integer.MAX_VALUE);
+
+            if (tentativeGScore < neighborNode.gScore) {
+                neighborNode.gScore = tentativeGScore;
+                neighborNode.fScore = tentativeGScore + heuristic(neighborCell, target, worldMap);
+                neighborNode.parent = currentNode;
+                openNodes.add(neighborNode);
+            }
+        }
+    }
+
     private int heuristic(Coordinates a, Class<? extends Eatable> target, WorldMap worldMap) {
-        //TODO: what if we have no target on the map
         Coordinates targetCoordinates = findTargetCoordinates(a, target, worldMap);
 
         return chebyshevDistance(a, targetCoordinates);
@@ -78,15 +75,11 @@ public class AStarPathfinder extends AbstractPathfinder {
         return Math.max(Math.abs(a.row() - b.row()), Math.abs(a.column() - b.column()));
     }
 
-    private Coordinates findTargetCoordinates(Coordinates start, Class<? extends Eatable> target, WorldMap
-            worldMap) {
+
+    private Coordinates findTargetCoordinates(Coordinates start, Class<? extends Eatable> target, WorldMap worldMap) {
+
         Coordinates closestTarget = null;
         int minDistance = Integer.MAX_VALUE;
-        // Iterate through the world map to find all target main.entity's coordinates
-
-        // my try to use stream
-        //worldMap.getAllCoordinatesWithEntities().stream()
-        //       .filter(coordinates -> (worldMap.getEntity(coordinates).getClass()) == target)
 
         for (Coordinates coordinates : worldMap.getAllCellsWithEntities()) {
             if (worldMap.getEntity(coordinates).getClass() == target) {
@@ -98,29 +91,32 @@ public class AStarPathfinder extends AbstractPathfinder {
             }
         }
 
-        return closestTarget; // Return the closest target coordinates or null if none found
+        return closestTarget;
     }
 
+
     private List<Coordinates> reconstructPath(Node currentNode) {
+
         List<Coordinates> path = new ArrayList<>();
         while (currentNode != null) {
             path.add(currentNode.coordinates);
             currentNode = currentNode.parent;
         }
         Collections.reverse(path);
+        System.out.println(path);
         return path;
     }
 
     private static class Node {
         Coordinates coordinates;
-        int g; // Cost from start to this node
-        int f; // Total cost (gScore + heuristic)
+        int gScore; // Cost from start to this node
+        int fScore; // Total cost (gScore + heuristic)
         Node parent;
 
-        Node(Coordinates coordinates, int g, int f) {
+        Node(Coordinates coordinates, int gScore, int fScore) {
             this.coordinates = coordinates;
-            this.g = g;
-            this.f = f;
+            this.gScore = gScore;
+            this.fScore = fScore;
             this.parent = null;
         }
     }

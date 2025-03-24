@@ -11,7 +11,7 @@ import java.util.List;
 public class CustomWorldMain {
     public static void main(String[] args) {
         WorldMapFactory worldMapFactory = new WorldMapFactory();
-        WorldMap worldMap = worldMapFactory.createCustom10x15();
+        WorldMap worldMap = worldMapFactory.createCustom7x7();
 
         List<Action> initActions = Collections.emptyList();
 

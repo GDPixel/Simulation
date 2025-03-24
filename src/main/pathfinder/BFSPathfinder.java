@@ -11,29 +11,29 @@ public class BFSPathfinder extends AbstractPathfinder {
 
     public List<Coordinates> find(Coordinates start, Class<? extends Eatable> target, WorldMap worldMap) {
 
-        if (targetCount(worldMap, target) == 0) {
+        if (countTargets(target, worldMap) == 0) {
             return Collections.emptyList();
         }
 
         Set<Coordinates> visited = new HashSet<>();
-        Queue<Coordinates> queue = new LinkedList<>();
+        Queue<Coordinates> cellsToExplore = new LinkedList<>();
         Map<Coordinates, Coordinates> backTrace = new HashMap<>();
 
-        queue.add(start);
+        cellsToExplore.add(start);
 
-        while (!queue.isEmpty()) {
-            Coordinates current = queue.remove();
+        while (!cellsToExplore.isEmpty()) {
+            Coordinates current = cellsToExplore.remove();
             visited.add(current);
 
-            if (isTargetEntity(current, target, worldMap)) {
+            if (isTargetFound(current, target, worldMap)) {
                 return reconstructPath(backTrace, current, start);
             }
 
-            List<Coordinates> adjacentCells = WorldMapUtil.getValidCellsAroundTarget(current, worldMap);
-            for (Coordinates adjacentCell : adjacentCells) {
-                if (isValidMove(visited, adjacentCell, target, worldMap)) {
-                    queue.add(adjacentCell);
-                    backTrace.put(adjacentCell, current);
+            List<Coordinates> neighborCells = WorldMapUtil.getValidCellsAroundTarget(current, worldMap);
+            for (Coordinates neighborCell : neighborCells) {
+                if (isValidMove(visited, neighborCell, target, worldMap)) {
+                    cellsToExplore.add(neighborCell);
+                    backTrace.put(neighborCell, current);
                 }
             }
         }

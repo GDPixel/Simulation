@@ -30,8 +30,11 @@ public class WorldMapFactory {
     public WorldMap createCustom7x7() {
         WorldMap worldMap = new WorldMap(7, 7);
 
+        worldMap.addEntity(new Coordinates(0, 5), new Rock());
+        worldMap.addEntity(new Coordinates(0, 6), new Grass());
         worldMap.addEntity(new Coordinates(1, 4), new Tree());
-        worldMap.addEntity(new Coordinates(1, 6), new Grass());
+        worldMap.addEntity(new Coordinates(1, 5), new Rock());
+        worldMap.addEntity(new Coordinates(1, 6), new Rock());
         worldMap.addEntity(new Coordinates(2, 1), new Rock());
         worldMap.addEntity(new Coordinates(2, 4), new Herbivore());
         worldMap.addEntity(new Coordinates(3, 0), new Grass());

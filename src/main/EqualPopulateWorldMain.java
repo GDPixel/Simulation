@@ -24,12 +24,13 @@ public class EqualPopulateWorldMain {
         );
 
         List<Action> initActions = List.of(
-                new EqualPopulateWorldAction(50, entitySuppliers)
+                new EqualPopulateWorldAction(30, entitySuppliers)
         );
 
         List<main.action.Action> turnActions = List.of(
-                new HungerDamageAction(1, 3),
-                new SpawnAction(Grass::new, 1, 7),
+                new HungerDamageAction(1, 2),
+                new SpawnAction(Grass::new, 3, 2),
+                new SpawnAction(Herbivore::new, 1, 5),
                 new MoveAllCreaturesAction());
 
         Simulation simulation = new Simulation(worldMap, initActions, turnActions);

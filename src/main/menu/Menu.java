@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
+    private static final String THIN_BORDER = "───────────────────────────────────";
     private static final int FIRST_ID = 1;
 
     private final Scanner scanner = new Scanner(System.in);
@@ -27,7 +28,9 @@ public class Menu {
     }
 
     public void show() {
-        System.out.println(title);
+        System.out.println(THIN_BORDER);
+        System.out.printf("\t\t%s%n",title);
+        System.out.println(THIN_BORDER);
         for (Item item : items) {
             System.out.printf("%d. %s%n", item.id, item.title);
         }
