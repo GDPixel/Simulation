@@ -17,7 +17,7 @@
 - Возможно задать фон разного цвета
 - И многое другое
 
-## Установка Linux
+## Установка
 
 1. Клонируйте репозиторий:
 
@@ -57,7 +57,7 @@ The essence of the project is to implement a step-by-step simulation of a 2D wor
 - Background color can be set to different colors
 - And much more
 
-## Installation on Linux
+## Installation
 
 1. Clone the repository:
 
