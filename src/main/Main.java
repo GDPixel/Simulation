@@ -14,23 +14,43 @@ import main.worldmap.WorldMap;
 import java.util.List;
 
 public class Main {
+    public static final int WORLD_MAP_ROWS = 12;
+    public static final int WORLD_MAP_COLUMNS = 20;
+
+    public static final int INITIAL_ROCK_AMOUNT = 16;
+    public static final int INITIAL_TREE_AMOUNT = 15;
+    public static final int INITIAL_GRASS_AMOUNT = 10;
+    public static final int INITIAL_HERBIVORE_AMOUNT = 8;
+    public static final int INITIAL_PREDATOR_AMOUNT = 6;
+
+    public static final int HUNGER_DAMAGE = 1;
+    public static final int HUNGER_DAMAGE_FREQUENCY = 4;
+
+    public static final int PREDATOR_RESPAWN_AMOUNT = 1;
+    public static final int PREDATOR_RESPAWN_FREQUENCY = 10;
+    public static final int HERBIVORE_RESPAWN_AMOUNT = 1;
+    public static final int HERBIVORE_RESPAWN_FREQUENCY = 5;
+    public static final int GRASS_RESPAWN_AMOUNT = 5;
+    public static final int GRASS_RESPAWN_FREQUENCY = 2;
+
+
     public static void main(String[] args) {
-        WorldMap worldMap = new WorldMap(12, 20);
+        WorldMap worldMap = new WorldMap(WORLD_MAP_ROWS, WORLD_MAP_COLUMNS);
         Renderer consoleRenderer = new ConsoleRenderer();
 
         List<Action> initActions = List.of(
-                new SpawnAction(Rock::new, 16),
-                new SpawnAction(Tree::new, 15),
-                new SpawnAction(Grass::new, 10),
-                new SpawnAction(Herbivore::new, 8),
-                new SpawnAction(Predator::new, 6)
+                new SpawnAction(Rock::new, INITIAL_ROCK_AMOUNT),
+                new SpawnAction(Tree::new, INITIAL_TREE_AMOUNT),
+                new SpawnAction(Grass::new, INITIAL_GRASS_AMOUNT),
+                new SpawnAction(Herbivore::new, INITIAL_HERBIVORE_AMOUNT),
+                new SpawnAction(Predator::new, INITIAL_PREDATOR_AMOUNT)
         );
 
         List<Action> turnActions = List.of(
-                new HungerDamageAction(1, 4),
-                new SpawnAction(Predator::new, 1,10),
-                new SpawnAction(Herbivore::new, 1,5),
-                new SpawnAction(Grass::new, 5,2),
+                new HungerDamageAction(HUNGER_DAMAGE, HUNGER_DAMAGE_FREQUENCY),
+                new SpawnAction(Predator::new, PREDATOR_RESPAWN_AMOUNT, PREDATOR_RESPAWN_FREQUENCY),
+                new SpawnAction(Herbivore::new, HERBIVORE_RESPAWN_AMOUNT, HERBIVORE_RESPAWN_FREQUENCY),
+                new SpawnAction(Grass::new, GRASS_RESPAWN_AMOUNT, GRASS_RESPAWN_FREQUENCY),
                 new MoveAllCreaturesAction());
 
         Simulation simulation = new Simulation(worldMap, consoleRenderer, initActions, turnActions);

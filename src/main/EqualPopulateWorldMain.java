@@ -16,28 +16,41 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class EqualPopulateWorldMain {
+    public static final int WORLD_MAP_ROWS = 15;
+    public static final int WORLD_MAP_COLUMNS = 20;
+
+    public static final int EQUAL_POPULATE_WORLD_PERCENT = 40;
+    public static final List<Supplier<Entity>> ENTITIES_TO_SPAWN = List.of(
+            Rock::new,
+            Grass::new,
+            Tree::new,
+            Herbivore::new,
+            Predator::new
+    );
+
+    public static final int HUNGER_DAMAGE = 1;
+    public static final int HUNGER_DAMAGE_FREQUENCY = 2;
+
+    public static final int HERBIVORE_RESPAWN_AMOUNT = 2;
+    public static final int HERBIVORE_RESPAWN_FREQUENCY = 5;
+    public static final int GRASS_RESPAWN_AMOUNT = 4;
+    public static final int GRASS_RESPAWN_FREQUENCY = 1;
+
     public static final boolean DONT_SHOW_HP = false;
 
     public static void main(String[] args) {
-        WorldMap worldMap = new WorldMap(12,20);
+        WorldMap worldMap = new WorldMap(WORLD_MAP_ROWS, WORLD_MAP_COLUMNS);
         Renderer consoleRenderer = new ConsoleRenderer(DONT_SHOW_HP);
 
-        List<Supplier<Entity>> entitySuppliers = List.of(
-                Rock::new,
-                Grass::new,
-                Tree::new,
-                Herbivore::new,
-                Predator::new
-        );
 
         List<Action> initActions = List.of(
-                new EqualPopulateWorldAction(40, entitySuppliers)
+                new EqualPopulateWorldAction(EQUAL_POPULATE_WORLD_PERCENT, ENTITIES_TO_SPAWN)
         );
 
         List<main.action.Action> turnActions = List.of(
-                new HungerDamageAction(1, 2),
-                new SpawnAction(Grass::new, 3, 2),
-                new SpawnAction(Herbivore::new, 1, 5),
+                new HungerDamageAction(HUNGER_DAMAGE, HUNGER_DAMAGE_FREQUENCY),
+                new SpawnAction(Grass::new, GRASS_RESPAWN_AMOUNT, GRASS_RESPAWN_FREQUENCY),
+                new SpawnAction(Herbivore::new, HERBIVORE_RESPAWN_AMOUNT, HERBIVORE_RESPAWN_FREQUENCY),
                 new MoveAllCreaturesAction());
 
         Simulation simulation = new Simulation(worldMap, consoleRenderer, initActions, turnActions);
